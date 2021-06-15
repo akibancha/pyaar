@@ -1,0 +1,9 @@
+{
+    "bored_rat": {
+        "name": "bored rat",
+        "char": [["r", "red", "black"]],
+        "unpassable": true,
+        "update_fov": true,
+        "FOV":{"range": 10, "can_see":[]},
+        "simple_ai": true}
+}

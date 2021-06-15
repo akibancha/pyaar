@@ -1,0 +1,35 @@
+{
+  "test_wall": {
+    "name": "test wall",
+    "char": [["#", "yellow", "black"]],
+    "map_tile": true,
+    "unpassable": true,
+    "wall": true,
+    "blocks_sight": true
+  },
+  "test_floor": {
+    "name": "test floor",
+    "char": [[".", "blue", "black"]],
+    "map_tile": true
+  },
+  "test_iron_tree": {
+    "name": "iron tree",
+    "char": [["Y", "red", "black"]],
+    "unpassable": true,
+    "blocks_sight": true,
+    "map_tile": true
+  },
+  "test_copper_tree": {
+    "name": "copper tree",
+    "char": [["T", "cyan", "black"]],
+    "unpassable": true,
+    "blocks_sight": true,
+    "map_tile": true
+  },
+  "boulder": {
+    "name": "boulder",
+    "char": [["O", "white", "black"]],
+    "unpassable": true,
+    "blocks_sight": true
+  }
+}

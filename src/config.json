@@ -1,0 +1,100 @@
+{
+  "base_window_sizes_default": {
+    "map_window": [
+      80,
+      60
+    ],
+    "log_window": [
+      20,
+      100
+    ],
+    "info_window": [
+      40,
+      20
+    ]
+  },
+  "base_window_sizes": {
+    "map_window": [
+      60,
+      60
+    ],
+    "log_window": [
+      40,
+      100
+    ],
+    "info_window": [
+      60,
+      40
+    ]
+  },
+  "keyboard": {
+    "move_north": [
+      "k",
+      "8",
+      "ă"
+    ],
+    "move_south": [
+      "j",
+      "2"
+    ],
+    "move_west": [
+      "h",
+      "4"
+    ],
+    "move_east": [
+      "l",
+      "6"
+    ],
+    "move_north_west":
+    [
+      "7",
+      "z"
+    ],
+    "move_north_east":
+    [
+      "8",
+      "u"
+    ],
+    "move_south_west":
+    [
+      "1",
+      "b"
+    ],
+    "move_south_east":
+    [
+      "3",
+      "n"
+    ],
+    "quit": [
+      "Q"
+    ],
+    "inventory": [
+      "i"
+    ],
+    "toggle_fov":
+    [
+      "F"
+    ],
+    "toggle_collision":
+    [
+      "C"
+    ],
+    "dump_entities_to_json":
+    [
+      "P"
+    ],
+    "look":
+    [
+      "x"
+    ],
+    "vest":
+    [
+      "a"
+    ]
+  },
+    "debug": {
+      "disable_fov": false,
+      "disable_collision": false,
+      "keyboard_timeout": 400
+    }
+}
