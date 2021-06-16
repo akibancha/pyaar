@@ -61,7 +61,7 @@ def handle_input(game,
                 else:
                     game.pointer_bound = True
 
-            if "vest" in k and key in v:
+            if "change_fov_entity" in k and key in v:
                 if not game.pointer_bound:
                     y, x = game.pointer_pos
                     game.pent = game.game_map["map_array"][y][x][-1]
