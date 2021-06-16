@@ -25,23 +25,25 @@ def render_resize_msg(min_size: Vec2int, screen, frames: int):
         screen_size_y, screen_size_x = screen.getmaxyx()
 
         if screen_size_y < min_y:
-            resize_info_y = f"{abs(screen_size_y - min_y)} chars to small"
+            resize_info_y = f" {abs(screen_size_y - min_y)} chars to small"
         else:
-            resize_info_y = "|great|"
+            resize_info_y = " great :)"
         if screen_size_x < min_x:
-            resize_info_x = f"{abs(screen_size_x - min_x)} chars to small"
+            resize_info_x = f" {abs(screen_size_x - min_x)} chars to small"
         else:
-            resize_info_x = "|great|"
+            resize_info_x = " great :)"
 
-        text_line_1 = (f"The minimal terminal size is set to y:{min_y}, " +
-                       f"x:{min_x}")
-        text_line_2 = (f"Your current terminal is y:{screen_size_y}, " +
-                       f"x:{screen_size_x}")
+        text_line_1 = (f"The minimal terminal size is set to y: {min_y}, " +
+                       f"x: {min_x}")
+        text_line_2 = (f"Your current terminal size is y: {screen_size_y}, " +
+                       f"x: {screen_size_x}")
         text_line_3 = "Resize your terminal, please."
-        text_line_4 = f"y:{resize_info_y} x:{resize_info_x}"
+        text_line_4 = f"(vertical space) y:{resize_info_y}"
+        text_line_5 = f"(horizontal space) x:{resize_info_x}"
 
         y = screen_size_y // 2
-        for line in [text_line_1, text_line_2, text_line_3, text_line_4]:
+        for line in [text_line_1, text_line_2, text_line_3,
+                     text_line_4, text_line_5]:
             x = screen_size_x // 2 - len(line) // 2
             try:
                 screen.addstr(y, x, line)
