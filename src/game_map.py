@@ -1,6 +1,5 @@
 from __future__ import annotations
 import random
-from types import coroutine
 from typing import Tuple, Iterator
 
 import game

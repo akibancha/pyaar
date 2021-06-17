@@ -10,6 +10,7 @@ import interface.window
 import interface.debug
 import interface.input
 import interface.render_log
+import entity_factory
 
 
 class Game:
@@ -62,7 +63,10 @@ class Game:
     def create_entity(self,
                       chapter: str,
                       blueprint: str) -> int:
-        return self.pool.add_entity(self.blueprints[chapter][blueprint])
+        forged_blueprint = entity_factory.create_actor(self.
+                                                       blueprints[chapter]
+                                                       [blueprint])
+        return self.pool.add_entity(forged_blueprint)
 
     def place_entity(self,
                      pos: Vec2int,

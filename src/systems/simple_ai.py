@@ -1,5 +1,4 @@
 import random
-from systems.fov import Fov
 import threading
 import ecs
 from mytpyes import Vec2int
@@ -76,32 +75,40 @@ class Simple_Ai_System(ecs.System):
             if path:
                 sy, sx = self.spos
                 py, px = path[-1]
-                velo = {"velo": (py -sy, px -sx)}
+                velo = {"velo": (py - sy, px - sx)}
             else:
-                velo = {"velo": (random.randint(-1, 1 ), random.randint(-1, 1))}
-            perform = {"Perform": {"round": (0, 20),
+                velo = {"velo": (random.randint(-1, 1),
+                                 random.randint(-1, 1))}
+            movemen_cost = self.pool.entities[self.ent_id].get("movement_cost")
+            perform = {"Perform": {"round": (0, movemen_cost),
                        "components": velo}}
             self.pool.add_components_to_entity(perform, self.ent_id)
             Simple_Ai_System.testlock.release()
-
 
     def update(self):
 
         player_ent = self.pool.etc["game"].player
         player_pos = player_ent.get("pos")
+
         if player_pos:
             player_pos = (player_pos[0], player_pos[1])
         else:
             return
 
         threads = []
-        for entity_id in self.act_on(["simple_ai", "FOV", "pos"]):
+
+        for entity_id in self.act_on(["simple_ai", "FOV",
+                                      "pos", "movement_cost"]):
+
             ent = self.entities[entity_id]
+
             if ent.get("Perform"):
                 continue
+
             ent_fov = ent.get("FOV")
             ent_pos = ent.get("pos")
             ey, ex, _ = ent_pos
+
             if player_pos in ent_fov:
                 threads.append(Simple_Ai_System.PFThread(ent_id=entity_id,
                                                          spos=(ey, ex),
@@ -122,8 +129,9 @@ class Simple_Ai_System(ecs.System):
             #perform = {"Perform": {"round": (0, 20),
             #           "components": velo}}
             #self.pool.add_components_to_entity(perform, entity_id)
+
             else:
-                velo = {"velo": (random.randint(-1, 1 ), random.randint(-1, 1))}
+                velo = {"velo": (random.randint(-1, 1), random.randint(-1, 1))}
                 perform = {"Perform": {"round": (0, 20),
                            "components": velo}}
                 self.pool.add_components_to_entity(perform, entity_id)

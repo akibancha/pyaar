@@ -1,7 +1,10 @@
 {
     "bored_rat": {
-        "name": "bored rat",
+        "entity_type": "rat",
+        "names": ["Kra", "Xaxa", "Siief", "Quee", "Schaarf"],
+        "attributes": ["bloody", "cruel", "slow", "crazy", "stoned"],
         "char": [["r", "red", "black"]],
+        "movement_range": [16, 20],
         "unpassable": true,
         "update_fov": true,
         "FOV":{"range": 10, "can_see":[]},
