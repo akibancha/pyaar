@@ -1,12 +1,12 @@
 {
     "bored_rat": {
         "entity_type": "rat",
-        "names": ["Kra", "Xaxa", "Siief", "Quee", "Schaarf"],
-        "attributes": ["bloody", "cruel", "slow", "crazy", "stoned"],
+        "names": ["Kra", "Xaxa", "Siief", "Quee", "Scaaf", "Frai", "Quaae"],
+        "attributes": ["bloody", "cruel", "slow", "crazy", "stoned", "bored", "dirty", "wet", "lazy"],
         "char": [["r", "red", "black"]],
         "movement_range": [16, 20],
         "unpassable": true,
         "update_fov": true,
-        "FOV":{"range": 10, "can_see":[]},
+        "FOV":true,
         "simple_ai": true}
 }
