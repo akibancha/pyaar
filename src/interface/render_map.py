@@ -3,17 +3,17 @@ import random
 from typing import Tuple, Set
 
 
-def get_draw_range(pointer: Tuple[int, int],
-                   map: Tuple[int, int],
-                   window: Tuple[int, int]) -> Tuple[range, range]:
+def get_draw_range(pointer_pos: Tuple[int, int],
+                   map_size: Tuple[int, int],
+                   window_size: Tuple[int, int]) -> Tuple[range, range]:
 
-    pointer_y, pointer_x = pointer
+    pointer_y, pointer_x = pointer_pos
 
-    win_size_y, win_size_x = window
+    win_size_y, win_size_x = window_size
     win_size_y += -2
     win_size_x += -2
 
-    map_size_y, map_size_x = map
+    map_size_y, map_size_x = map_size
 
     draw_y_begin = pointer_y - win_size_y // 2
     draw_y_end = pointer_y + win_size_y // 2
@@ -63,9 +63,9 @@ def render(game,
     game_tile_map = game_map["map_array"]
     game_map_height = game_map["map_height"]
     game_map_width = game_map["map_width"]
-    draw_y, draw_x = get_draw_range(pointer_pos,
-                                    (game_map_height, game_map_width),
-                                    (window_size_y, window_size_x))
+    draw_y, draw_x = get_draw_range(pointer_pos=pointer_pos,
+                                    map_size=(game_map_height, game_map_width),
+                                    window_size=(window_size_y, window_size_x))
 
     map_window.addstr(0, 1, f"({draw_y}, {draw_x}, {game.round}, {game.pointer_pos})")
     fov_set: Set[Tuple[int, int]] = set()
