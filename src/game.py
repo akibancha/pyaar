@@ -28,7 +28,7 @@ class Game:
         self.log = list()
         self.colors = init_colors.create_color_book()
         self.pool.etc["game"] = self
-        self.pointer_pos = None,
+        self.pointer_pos = None
         self.pointer_bound = True
         self.pent = None
 
