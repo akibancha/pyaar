@@ -67,7 +67,7 @@ def render(game,
                                     (game_map_height, game_map_width),
                                     (window_size_y, window_size_x))
 
-    map_window.addstr(0, 1, f"({draw_y}, {draw_x}, {game.round})")
+    map_window.addstr(0, 1, f"({draw_y}, {draw_x}, {game.round}, {game.pointer_pos})")
     fov_set: Set[Vec2int] = set()
     if fov:
         fov_set = game.pool.entities[fov_entity]["FOV"]
