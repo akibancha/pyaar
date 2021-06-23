@@ -2,12 +2,10 @@ import curses
 import random
 from typing import Tuple, Set
 
-from mytpyes import Vec2int
 
-
-def get_draw_range(pointer: Vec2int,
-                   map: Vec2int,
-                   window: Vec2int) -> Tuple[range, range]:
+def get_draw_range(pointer: Tuple[int, int],
+                   map: Tuple[int, int],
+                   window: Tuple[int, int]) -> Tuple[range, range]:
 
     pointer_y, pointer_x = pointer
 
@@ -53,7 +51,7 @@ def render(game,
            map_window,
            fov: bool,
            fov_entity: int = None,
-           pointer_pos: Vec2int = (0, 0)) -> None:
+           pointer_pos: Tuple[int, int] = (0, 0)) -> None:
 
     map_window.box()
 
@@ -68,7 +66,7 @@ def render(game,
                                     (window_size_y, window_size_x))
 
     map_window.addstr(0, 1, f"({draw_y}, {draw_x}, {game.round}, {game.pointer_pos})")
-    fov_set: Set[Vec2int] = set()
+    fov_set: Set[Tuple[int, int]] = set()
     if fov:
         fov_set = game.pool.entities[fov_entity]["FOV"]
     for window_y, map_y in enumerate(draw_y, 1):
