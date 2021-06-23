@@ -1,10 +1,9 @@
 import json
 import os
-from typing import Optional
+from typing import Optional, Tuple
 
 import ecs
 import init_colors
-from mytpyes import Vec2int
 import interface.render_map
 import interface.window
 import interface.debug
@@ -29,7 +28,7 @@ class Game:
         self.log = list()
         self.colors = init_colors.create_color_book()
         self.pool.etc["game"] = self
-        self.pointer_pos = None
+        self.pointer_pos = None,
         self.pointer_bound = True
         self.pent = None
 
@@ -69,7 +68,7 @@ class Game:
         return self.pool.add_entity(forged_blueprint)
 
     def place_entity(self,
-                     pos: Vec2int,
+                     pos: Tuple[int, int],
                      entity_id: Optional[int] = None,
                      chapter: Optional[str] = None,
                      blueprint: Optional[str] = None,
@@ -90,13 +89,13 @@ class Game:
             return entity_id
 
     def erase_entities(self,
-                       pos: Vec2int) -> None:
+                       pos: Tuple[int, int]) -> None:
         pos_y, pos_x = pos
         self.game_map["map_array"][pos_y][pos_x] = list()
 
     def erase_entity(self,
                      entity_id: int,
-                     pos: Optional[Vec2int] = None) -> None:
+                     pos: Optional[Tuple[int, int]] = None) -> None:
         if pos:
             pos_y, pos_x = pos
             self.game_map["map_array"][pos_y][pos_x].remove(entity_id)
@@ -119,7 +118,7 @@ class Game:
 
         if self.pointer_bound:
             py, px, _ = self.player["pos"]
-            self.pointer_pos: Vec2int = (py, px)
+            self.pointer_pos: Tuple[int, int] = (py, px)
 
         if self.state in ("normal", "calc"):
 
