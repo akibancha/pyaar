@@ -25,9 +25,12 @@ def handle_input(game,
                     game.pool.add_components_to_entity(component, game.player_id)
                     return
                 else:
-                    dpy, dpx = movement_vectors[k.replace("move_", "")]
                     py, px = game.pointer_pos
-                    game.pointer_pos = (dpy + py, dpx + px)
+                    dpy, dpx = movement_vectors[k.replace("move_", "")]
+                    npy, npx = py + dpy, px + dpx
+                    if (npy in range(game.game_map["map_height"]) and
+                       npx in range(game.game_map["map_width"])):
+                        game.pointer_pos = (npy, npx)
                     return
 
             if "quit" in k and key in v:
