@@ -1,11 +1,9 @@
 import math
 from fractions import Fraction
-from typing import Iterator
+from typing import Iterator, Tuple
 import threading
 
 import ecs
-import helpers.tilemap
-from mytpyes import Vec2int
 
 
 class Quarant:
@@ -22,7 +20,7 @@ class Quarant:
         self.oy, self.ox = origin
 
     def transform(self,
-                  tile) -> Vec2int:
+                  tile) -> Tuple[int, int]:
         y, x = tile
         if self.cardinal == self.N:
             return self.oy - y, self.ox + x
@@ -45,7 +43,7 @@ class Row:
         self.start_slope = start_slope
         self.end_slope = end_slope
 
-    def tiles(self) -> Iterator[Vec2int]:
+    def tiles(self) -> Iterator[Tuple[int, int]]:
         min_x = round_ties_up(self.depth * self.start_slope)
         max_x = round_ties_down(self.depth * self.end_slope)
         for x in range(min_x, max_x + 1):
@@ -57,13 +55,13 @@ class Row:
                    self.end_slope)
 
 
-def slope(tile: Vec2int) -> Fraction:
+def slope(tile: Tuple[int, int]) -> Fraction:
     y, x = tile
     return Fraction(2 * x - 1, 2 * y)
 
 
 def is_symmetric(row: Row,
-                 tile: Vec2int) -> bool:
+                 tile: Tuple[int, int]) -> bool:
     y, x = tile
     return (x >= row.depth * row.start_slope and
             x <= row.depth * row.end_slope)
@@ -75,6 +73,7 @@ def round_ties_up(n) -> int:
 
 def round_ties_down(n) -> int:
     return math.ceil(n - 0.5)
+
 
 def calc_fov(ori, tile_map, entities) -> set:
 
@@ -146,12 +145,16 @@ class Fov(ecs.System):
 
     class FovThread(threading.Thread):
 
-        def __init__(self, ent_id, pos, tile_map, ents):
+        def __init__(self,
+                     ent_id: int,
+                     pos: Tuple[int, int],
+                     tile_map: dict,
+                     pool: ecs.Pool):
             threading.Thread.__init__(self)
             self.ent_id = ent_id
             self.ent_pos = pos
             self.tile_map = tile_map
-            self.pool = ents
+            self.pool = pool
 
         def run(self):
             fov_set = calc_fov(ori=self.ent_pos,
@@ -160,15 +163,16 @@ class Fov(ecs.System):
             self.pool.entities[self.ent_id]["FOV"] = fov_set
             self.pool.remove_component_from_entity("update_fov", self.ent_id)
 
-
     def update(self):
-
         threads = []
         for ent_id in self.act_on(["FOV", "update_fov", "pos"]):
             ent = self.entities[ent_id]
             py, px, map_id = ent["pos"]
             tile_map = self.entities[map_id]
-            threads.append(Fov.FovThread(ent_id=ent_id, pos=(py, px), tile_map=tile_map, ents=self.pool))
+            threads.append(Fov.FovThread(ent_id=ent_id,
+                                         pos=(py, px),
+                                         tile_map=tile_map,
+                                         pool=self.pool))
         for thread in threads:
             thread.start()
         for thread in threads:
