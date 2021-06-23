@@ -10,6 +10,8 @@ def get_draw_range(pointer: Tuple[int, int],
     pointer_y, pointer_x = pointer
 
     win_size_y, win_size_x = window
+    win_size_y += -2
+    win_size_x += -2
 
     map_size_y, map_size_x = map
 
@@ -43,8 +45,8 @@ def get_draw_range(pointer: Tuple[int, int],
         else:
             draw_x_end = map_size_x
 
-    return (range(draw_y_begin, draw_y_end - 2),
-            range(draw_x_begin, draw_x_end - 2))
+    return (range(draw_y_begin, draw_y_end),
+            range(draw_x_begin, draw_x_end))
 
 
 def render(game,
