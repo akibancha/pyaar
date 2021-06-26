@@ -54,7 +54,7 @@ def main(screen) -> None:
                       add_pos_comp=True)
     test.pointer_pos = player_pos
 
-    # load confif file
+    # load config file
     test.load_config("config.json")
 
     # init systems
@@ -71,7 +71,7 @@ def main(screen) -> None:
                          name="simple_ai",
                          layer=1)
 
-    # welceome log msg
+    # welcome log msg
     test.log.append("Welcome!")
     test.log.append("Use the vi keys or the numpad to move")
 
