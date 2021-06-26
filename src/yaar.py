@@ -78,6 +78,7 @@ def main(screen) -> None:
     # set input timeout
     screen.timeout(test.config["debug"]["keyboard_timeout"])
 
+    # init entity fovs
     test.pool.update(["fov"])
 
     # game loop
