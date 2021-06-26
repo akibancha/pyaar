@@ -54,9 +54,6 @@ def main(screen) -> None:
                       add_pos_comp=True)
     test.pointer_pos = player_pos
 
-    # TODO remove this
-    pad = curses.newwin(24, 80, 1, 1)
-
     # load confif file
     test.load_config("config.json")
 
@@ -78,15 +75,15 @@ def main(screen) -> None:
     test.log.append("Welcome!")
     test.log.append("Use the vi keys or the numpad to move")
 
-    # TODO change pad to screen
-    pad.timeout(test.config["debug"]["keyboard_timeout"])
+    # set input timeout
+    screen.timeout(test.config["debug"]["keyboard_timeout"])
 
     test.pool.update(["fov"])
 
     # game loop
     while test.state != "exit":
         test.perform_render(screen)
-        key = pad.getch()
+        key = screen.getch()
 
         if key >= 0 and not test.player.get("Perform"):
             test.perform_input(chr(key))
