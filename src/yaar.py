@@ -19,7 +19,7 @@ def main(screen) -> None:
 
     """
 
-    # deactivate hardware charactar/line editing
+    # deactivate hardware character/line editing
     # TODO make this part of the config
     screen.idcok(False)
     screen.idlok(False)
