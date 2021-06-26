@@ -10,17 +10,34 @@ import systems.perform
 import systems.simple_ai
 
 
-def main(screen):
+def main(screen) -> None:
+    """
+    The main function of this game.
+    It Initializes the main components of the game and starts the game loop.
 
+    :return None
+
+    """
+
+    # deactivate hardware charactar/line editing
+    # TODO make this part of the config
     screen.idcok(False)
     screen.idlok(False)
 
+    # deactivate terminal cursor
     curses.curs_set(False)
 
+    # create game class
     test = game.Game()
-    test.init_blueprints()
-    test.init_game_map(50, 50)
 
+    # init blueprints
+    test.init_blueprints()
+
+    # init test game map
+    test.init_game_map(50, 50)
+    game_map.create_map(game=test, level=1)
+
+    # init test player
     player_b = {"name": "player", "char": [["@", "white", "green"]],
                 "movement_cost": 15,
                 "unpassable": True,
@@ -29,30 +46,44 @@ def main(screen):
 
     test.init_player(player_b)
 
-    game_map.create_map(game=test, level=1)
-
-    pad = curses.newwin(24, 80, 1, 1)
-
-    test.load_config("config.json")
-
     player_pos = (test.
                   pool.
                   entities[random.choice(test.game_map["rooms"])]["center"])
     test.place_entity(pos=player_pos,
-                      entity_id=test.player_id, add_pos_comp=True)
+                      entity_id=test.player_id,
+                      add_pos_comp=True)
     test.pointer_pos = player_pos
 
-    test.pool.add_system(system=systems.move.MoveSystem, name="move", layer=2)
-    test.pool.add_system(system=systems.fov.Fov, name="fov", layer=3)
-    test.pool.add_system(system=systems.perform.Perform, name="perform", layer=0)
-    test.pool.add_system(system=systems.simple_ai.Simple_Ai_System, name="simple_ai", layer=1)
+    # TODO remove this
+    pad = curses.newwin(24, 80, 1, 1)
 
-    yy, xx = player_pos
+    # load confif file
+    test.load_config("config.json")
 
+    # init systems
+    test.pool.add_system(system=systems.move.MoveSystem,
+                         name="move",
+                         layer=2)
+    test.pool.add_system(system=systems.fov.Fov,
+                         name="fov",
+                         layer=3)
+    test.pool.add_system(system=systems.perform.Perform,
+                         name="perform",
+                         layer=0)
+    test.pool.add_system(system=systems.simple_ai.Simple_Ai_System,
+                         name="simple_ai",
+                         layer=1)
+
+    # welceome log msg
     test.log.append("Welcome!")
     test.log.append("Use the vi keys or the numpad to move")
+
+    # TODO change pad to screen
     pad.timeout(test.config["debug"]["keyboard_timeout"])
+
     test.pool.update(["fov"])
+
+    # game loop
     while test.state != "exit":
         test.perform_render(screen)
         key = pad.getch()
@@ -65,8 +96,10 @@ def main(screen):
             test.round += 1
 
 
+# start main function
 if __name__ == "__main__":
     curses.wrapper(main)
 
+# say good bye
 print("Thank you for playing pyaar!")
 print("Good Bye!")
