@@ -47,7 +47,6 @@ def main(screen):
     test.pool.add_system(system=systems.perform.Perform, name="perform", layer=0)
     test.pool.add_system(system=systems.simple_ai.Simple_Ai_System, name="simple_ai", layer=1)
 
-
     yy, xx = player_pos
 
     test.log.append("Welcome!")
@@ -66,7 +65,8 @@ def main(screen):
             test.round += 1
 
 
-curses.wrapper(main)
+if __name__ == "__main__":
+    curses.wrapper(main)
 
 print("Thank you for playing pyaar!")
 print("Good Bye!")
