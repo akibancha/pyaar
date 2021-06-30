@@ -113,21 +113,6 @@ class Simple_Ai_System(ecs.System):
                                                          tpos=player_pos,
                                                          pool=self.pool))
 
-
-            #    test = a_star(game=self.pool.etc["game"],
-            #                  start_pos=(ey, ex),
-            #                  target_pos=player_pos)
-            #    if not test:
-            #        velo = {"velo": (random.randint(-1, 1 ), random.randint(-1, 1))}
-            #    else:
-            #        ty, tx = test[-1]
-            #        velo = {"velo": (ty - ey, tx - ex)}
-            #else:
-            #    velo = {"velo": (random.randint(-1, 1 ), random.randint(-1, 1))}
-            #perform = {"Perform": {"round": (0, 20),
-            #           "components": velo}}
-            #self.pool.add_components_to_entity(perform, entity_id)
-
             else:
                 velo = {"velo": (random.randint(-1, 1), random.randint(-1, 1))}
                 perform = {"Perform": {"round": (0, 20),
