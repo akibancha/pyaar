@@ -83,12 +83,20 @@ def main(screen) -> None:
 
     # game loop
     while test.state != "exit":
+
+        # render screen
         test.perform_render(screen)
+
+        # get player input
         key = screen.getch()
 
+        # test if there is a player input and ensures the player isn't
+        # performing an action
         if key >= 0 and not test.player.get("Perform"):
             test.perform_input(chr(key))
 
+        # update the pool while the player is performing an action
+        # every update cycle equates to one ingame round
         while test.player.get("Perform"):
             test.pool.update()
             test.round += 1
