@@ -68,7 +68,6 @@ class Simple_Ai_System(ecs.System):
             self.pool = pool
 
         def run(self):
-            Simple_Ai_System.testlock.acquire()
             path = a_star(game=self.pool.etc["game"],
                           start_pos=self.spos,
                           target_pos=self.tpos)
@@ -83,7 +82,6 @@ class Simple_Ai_System(ecs.System):
             perform = {"Perform": {"round": (0, movemen_cost),
                        "components": velo}}
             self.pool.add_components_to_entity(perform, self.ent_id)
-            Simple_Ai_System.testlock.release()
 
     def update(self):
 
