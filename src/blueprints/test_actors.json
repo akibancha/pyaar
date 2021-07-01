@@ -5,6 +5,7 @@
         "attributes": ["bloody", "cruel", "slow", "crazy", "stoned", "bored", "dirty", "wet", "lazy"],
         "char": [["r", "red", "black"]],
         "movement_range": [16, 20],
+        "hp_range": [5, 8],
         "unpassable": true,
         "update_fov": true,
         "FOV":true,

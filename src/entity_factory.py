@@ -22,7 +22,11 @@ def create_actor(blueprint: dict) -> dict:
         name_string.append(f"{entity_type}")
 
     if hp_range:
-        pass
+        min_hp, max_hp = hp_range
+        hp = random.randint(min_hp, min_hp)
+        hp_component = {"max_hp": hp,
+                        "current_hp": hp}
+        blueprint["hp"] = hp_component
 
     if movment_range:
         min_cost, max_cost = movment_range
