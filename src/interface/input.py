@@ -1,4 +1,7 @@
 from typing import Optional
+from interface import window
+
+import interface.debug
 from helpers.movement import movement_vectors
 
 
@@ -68,3 +71,7 @@ def handle_input(game,
                 if not game.pointer_bound:
                     y, x = game.pointer_pos
                     game.pent = game.game_map["map_array"][y][x][-1]
+            if "debug_show_entity_info" in k and key in v:
+                if not game.pointer_bound:
+                    interface.debug.render_entity(game=game,
+                                                  window=game.base_windows["std"])

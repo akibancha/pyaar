@@ -126,7 +126,6 @@ class Game:
                                                screen=screen,
                                                frames=25)
             interface.window.set_base_windows(self, screen, True)
-            interface.debug.render(game=self, window=self.base_windows["info"])
             interface.render_log.render(map_window=self.base_windows["log"],
                                         game=self)
             interface.render_map.render(game=self,

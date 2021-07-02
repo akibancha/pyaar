@@ -90,6 +90,10 @@
     "change_fov_entity":
     [
       "a"
+    ],
+    "debug_show_entity_info":
+    [
+      "D"
     ]
   },
     "debug": {

@@ -112,6 +112,7 @@ def set_base_windows(game, screen, refresh: Optional[bool] = False):
     game.base_windows["map"] = map_window
     game.base_windows["log"] = log_window
     game.base_windows["info"] = info_window
+    game.base_windows["std"] = screen
 
     if refresh:
         for x in [map_window, log_window, info_window]:
