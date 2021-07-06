@@ -1,13 +1,15 @@
 import random
 import threading
+
+from typing import Tuple
 import ecs
-from mytpyes import Vec2int
 
 
 def a_star(game,
-           start_pos: Vec2int,
-           target_pos: Vec2int):
+           start_pos: Tuple[int, int],
+           target_pos: Tuple[int, int]):
 
+    # TODO fix pathfinding
     game_map = game.game_map
     path_nodes = game_map["path_nodes"]
     # start node = start_pos
@@ -35,10 +37,7 @@ def a_star(game,
         for neighbour in path_nodes[current_node]["neighbours"]:
             ny, nx = neighbour
             for meid in game_map["map_array"][ny][nx]:
-                b = False
                 if game.pool.entities[meid].get("unpassable"):
-                    b = True
-                if b:
                     break
                 g = g_dict[current_node] + 1
                 f = f_dict[current_node] = (g_dict[current_node] +
