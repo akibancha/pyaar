@@ -3,7 +3,6 @@ import random
 from typing import Tuple, Iterator
 
 import game
-from mytpyes import Vec2int
 import helpers.tilemap
 
 
@@ -22,7 +21,7 @@ class Rect_Room:
                 self.x_1 <= other.x_2 and self.x_2 >= other.x_1)
 
     @property
-    def center(self) -> Vec2int:
+    def center(self) -> Tuple[int, int]:
         center_y = (self.y_1 + self.y_2) // 2
         center_x = (self.x_1 + self.x_2) // 2
         return center_y, center_x
@@ -33,9 +32,9 @@ class Rect_Room:
                 range(self.x_1 + 1, self.x_2 - 1))
 
 
-def create_horizontal_tunnel_part(start: Vec2int,
-                                  end: Vec2int,
-                                  size: int) -> Iterator[Vec2int]:
+def create_horizontal_tunnel_part(start: Tuple[int, int],
+                                  end: Tuple[int, int],
+                                  size: int) -> Iterator[Tuple[int, int]]:
     start_y, start_x = start
     _, end_x = end
     tunnel_size = size // 2
@@ -46,9 +45,9 @@ def create_horizontal_tunnel_part(start: Vec2int,
             yield tunnel_y, tunnel_x
 
 
-def create_vertical_tunnel_part(start: Vec2int,
-                                end: Vec2int,
-                                size: int) -> Iterator[Vec2int]:
+def create_vertical_tunnel_part(start: Tuple[int, int],
+                                end: Tuple[int, int],
+                                size: int) -> Iterator[Tuple[int, int]]:
     start_y, _ = start
     end_y, end_x = end
     tunnel_size = size // 2
@@ -59,9 +58,9 @@ def create_vertical_tunnel_part(start: Vec2int,
             yield tunnel_y, tunnel_x
 
 
-def create_simple_tunnel(start: Vec2int,
-                         end: Vec2int,
-                         size: int) -> Iterator[Vec2int]:
+def create_simple_tunnel(start: Tuple[int, int],
+                         end: Tuple[int, int],
+                         size: int) -> Iterator[Tuple[int, int]]:
 
     if random.randint(0, 1):
         tunnel = [tunnel_coord for tunnel_coord
@@ -108,9 +107,9 @@ def cell_auto(game: game.Game,
 
 
 def create_room_map(game: game.Game,
-                    rooms: Vec2int,
-                    rooms_height: Vec2int,
-                    rooms_width: Vec2int,
+                    rooms: Tuple[int, int],
+                    rooms_height: Tuple[int, int],
+                    rooms_width: Tuple[int, int],
                     wall_tiles: list,
                     floor_tiles: list) -> None:
 

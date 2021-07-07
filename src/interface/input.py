@@ -1,5 +1,4 @@
 from typing import Optional
-from interface import window
 
 import interface.debug
 from helpers.movement import movement_vectors
@@ -23,9 +22,11 @@ def handle_input(game,
         for k, v in keys.items():
             if "move_" in k and key in v:
                 if game.pointer_bound:
-                    component = create_movement_component(k.replace("move_", ""),
+                    component = create_movement_component(k.
+                                                          replace("move_", ""),
                                                           game)
-                    game.pool.add_components_to_entity(component, game.player_id)
+                    game.pool.add_components_to_entity(component,
+                                                       game.player_id)
                     return
                 else:
                     py, px = game.pointer_pos

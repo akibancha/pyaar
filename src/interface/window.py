@@ -1,12 +1,12 @@
 import time
 import curses
-from typing import Optional
+from typing import Optional, Tuple
 
-from mytpyes import Vec2int
 import helpers.math
 
 
-def test_min_screen_size(min_size: Vec2int, screen) -> bool:
+def test_min_screen_size(min_size: Tuple[int, int],
+                         screen) -> bool:
 
     screen_size_y, screen_size_x = screen.getmaxyx()
     min_y, min_x = min_size
@@ -14,7 +14,9 @@ def test_min_screen_size(min_size: Vec2int, screen) -> bool:
     return screen_size_y >= min_y and screen_size_x >= min_x
 
 
-def render_resize_msg(min_size: Vec2int, screen, frames: int):
+def render_resize_msg(min_size: Tuple[int, int],
+                      screen,
+                      frames: int):
 
     screen_size_y, screen_size_x = screen.getmaxyx()
     min_y, min_x = min_size
@@ -55,7 +57,9 @@ def render_resize_msg(min_size: Vec2int, screen, frames: int):
         screen.refresh()
 
 
-def set_base_windows(game, screen, refresh: Optional[bool] = False):
+def set_base_windows(game,
+                     screen,
+                     refresh: Optional[bool] = False):
 
     screen_size_y, screen_size_x = screen.getmaxyx()
 

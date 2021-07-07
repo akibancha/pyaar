@@ -67,7 +67,8 @@ def render(game,
                                     map_size=(game_map_height, game_map_width),
                                     window_size=(window_size_y, window_size_x))
 
-    map_window.addstr(0, 1, f"({draw_y}, {draw_x}, {game.round}, {game.pointer_pos})")
+    debug_string = f"({draw_y}, {draw_x}, {game.round}, {game.pointer_pos})"
+    map_window.addstr(0, 1, debug_string)
     fov_set: Set[Tuple[int, int]] = set()
     if fov:
         fov_set = game.pool.entities[fov_entity]["FOV"]
@@ -80,8 +81,8 @@ def render(game,
             char, fg, bg = char_list
             color = game.colors[fg][bg]
             if (fov
-                and (map_y, map_x) not in fov_set
-                and not game.config["debug"]["disable_fov"]):
+               and (map_y, map_x) not in fov_set
+               and not game.config["debug"]["disable_fov"]):
                 char = None
             if char:
                 map_window.addstr(window_y, window_x,
