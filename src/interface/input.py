@@ -70,8 +70,16 @@ def handle_input(game,
 
             if "change_fov_entity" in k and key in v:
                 if not game.pointer_bound:
+                    old_fov_entity = game.pointer_entity
                     y, x = game.pointer_pos
-                    game.pent = game.game_map["map_array"][y][x][-1]
+                    new_fov_entity = game.game_map["map_array"][y][x][-1]
+                    if game.pool.entities[new_fov_entity].get("FOV"):
+                        game.pointer_entity = new_fov_entity
+                        log = f"<debug>: changed fov entity. {old_fov_entity} -> {game.pointer_entity}"
+                        game.log.append(log)
+                    else:
+                        log = f"<debug>: entity {new_fov_entity} does not have a field of view"
+                        game.log.append(log)
             if "debug_show_entity_info" in k and key in v:
                 if not game.pointer_bound:
                     interface.debug.render_entity(game=game,
