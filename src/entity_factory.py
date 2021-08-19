@@ -36,4 +36,3 @@ def create_actor(blueprint: dict) -> dict:
         blueprint["name_string"] = " ".join(name_string)
 
     return blueprint
-

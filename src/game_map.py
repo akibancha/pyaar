@@ -231,9 +231,9 @@ def create_map(game: game.Game, level: int) -> None:
                         rooms_width=(5, 10),
                         wall_tiles=wall,
                         floor_tiles=floor)
-        cell_auto(game=game,
-                  wall=wall,
-                  floor=floor)
+        #cell_auto(game=game,
+        #          wall=wall,
+        #          floor=floor)
         place_nonactors(game=game, entities=trees, iter=45)
         place_nonactors(game=game, entities=stones, iter=10)
         place_nonactors(game=game, entities=actors, uniq=True, iter=10, create_pos=True)

@@ -100,5 +100,9 @@
       "disable_fov": false,
       "disable_collision": false,
       "keyboard_timeout": 400
+    },
+    "options": {
+      "enable_idcok": false,
+      "enable_idlok": false
     }
 }

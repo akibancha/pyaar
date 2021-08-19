@@ -19,11 +19,6 @@ def main(screen) -> None:
 
     """
 
-    # deactivate hardware character/line editing
-    # TODO make this part of the config
-    screen.idcok(False)
-    screen.idlok(False)
-
     # deactivate terminal cursor
     curses.curs_set(False)
 
@@ -34,42 +29,62 @@ def main(screen) -> None:
     test.init_blueprints()
 
     # init test game map
-    test.init_game_map(50, 50)
-    game_map.create_map(game=test, level=1)
+    test.init_game_map(
+        height=50,
+        width=50
+    )
+
+    game_map.create_map(
+        game=test,
+        level=1
+    )
 
     # init test player
-    player_b = {"name": "player", "char": [["@", "white", "green"]],
+    player_b = {"name": "player",
+                "char": [["@", "white", "green"]],
                 "movement_cost": 15,
                 "unpassable": True,
                 "update_fov": True,
-                "FOV": {"range": 10, "can_see": set()}}
+                "FOV": True}
 
     test.init_player(player_b)
 
-    player_pos = (test.
-                  pool.
-                  entities[random.choice(test.game_map["rooms"])]["center"])
-    test.place_entity(pos=player_pos,
-                      entity_id=test.player_id,
-                      add_pos_comp=True)
+    player_pos = (
+        test.pool.entities[random.choice(test.game_map["rooms"])]["center"]
+    )
+
+    test.place_entity(
+        pos=player_pos,
+        entity_id=test.player_id,
+        add_pos_comp=True
+    )
+
     test.pointer_pos = player_pos
 
     # load config file
     test.load_config("config.json")
 
     # init systems
-    test.pool.add_system(system=systems.move.MoveSystem,
-                         name="move",
-                         layer=2)
-    test.pool.add_system(system=systems.fov.Fov,
-                         name="fov",
-                         layer=3)
-    test.pool.add_system(system=systems.perform.Perform,
-                         name="perform",
-                         layer=0)
-    test.pool.add_system(system=systems.simple_ai.Simple_Ai_System,
-                         name="simple_ai",
-                         layer=1)
+    test.pool.add_system(
+        system=systems.move.MoveSystem,
+        name="move",
+        layer=2
+    )
+    test.pool.add_system(
+        system=systems.fov.Fov,
+        name="fov",
+        layer=3
+    )
+    test.pool.add_system(
+        system=systems.perform.Perform,
+        name="perform",
+        layer=0
+    )
+    test.pool.add_system(
+        system=systems.simple_ai.Simple_Ai_System,
+        name="simple_ai",
+        layer=1
+    )
 
     # welcome log msg
     test.log.append("Welcome!")
@@ -78,9 +93,15 @@ def main(screen) -> None:
     # set input timeout
     screen.timeout(test.config["debug"]["keyboard_timeout"])
 
+    # hardware character/line editing
+    screen.idlok(test.config["options"]["enable_idlok"])
+    screen.idcok(test.config["options"]["enable_idcok"])
+
     # init entity fovs
     test.pool.update(["fov"])
 
+    test.pointer_bound = True
+    test.pointer_entity = test.player_id
     # game loop
     while test.state != "exit":
 
@@ -88,6 +109,7 @@ def main(screen) -> None:
         test.perform_render(screen)
 
         # get player input
+        key: int
         key = screen.getch()
 
         # test if there is a player input and ensures the player isn't

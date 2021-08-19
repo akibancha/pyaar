@@ -58,9 +58,18 @@ class Pool:
         self.components = dict()
         self.systems = dict()
         self.system_layers = dict()
-        self.entity_id = 0
+        self.entity_id = 1
         self.dead_entity_ids = set()
         self.etc = dict()
+
+    def check_for_entity_id(
+        self,
+        entity_id: int
+    ) -> bool:
+        if entity_id in self.entities:
+            return True
+        else:
+            return False
 
     def clean_entities(self) -> None:
         """
