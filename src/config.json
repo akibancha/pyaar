@@ -94,8 +94,17 @@
     "debug_show_entity_info":
     [
       "D"
+    ],
+    "debug_show_entity_info_scroll_up":
+    [
+        "k"
+    ],
+    "debug_show_entity_info_scroll_down":
+    [
+        "j"
     ]
   },
+ 
     "debug": {
       "disable_fov": false,
       "disable_collision": false,
