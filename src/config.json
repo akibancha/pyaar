@@ -1,4 +1,8 @@
 {
+  "screen_size": {
+      "height": 24,
+      "width": 80
+  },
   "base_window_sizes_default": {
     "map_window": [
       80,
@@ -108,6 +112,9 @@
     "debug": {
       "disable_fov": false,
       "disable_collision": false,
+      "enable_debug_log": true,
+      "debug_log_mgs_amount": 5000,
+      "debug_log_mgs_system_report": false,
       "keyboard_timeout": 400
     },
     "options": {
