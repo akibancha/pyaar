@@ -1,4 +1,5 @@
 from interface.window import render_resize_msg
+from typing import Any, Tuple
 
 def render_entity(game, window) -> None:
 
@@ -9,7 +10,7 @@ def render_entity(game, window) -> None:
     map_array: list[list[list[int]]]
     map_array = game.game_map["map_array"]
 
-    entities: dict[int: dict[str: Any]]
+    entities: dict[int, dict[str, Any]]
     entities = game.pool.entities
 
     ent_ids: list[int]
@@ -17,7 +18,7 @@ def render_entity(game, window) -> None:
 
     number_of_ents: int = len(ent_ids)
 
-    str_format: dict[str: str]
+    str_format: dict[str, str]
     if number_of_ents > 1:
         str_format = {
                 "verb": "are",
@@ -34,7 +35,6 @@ def render_entity(game, window) -> None:
     min_screen_size = (game.config["screen_size"]["height"], game.config["screen_size"]["width"])
     while True:
         render_resize_msg(screen=window, min_size=min_screen_size, frames=60)
-        line: int = 1
 
         sy: int
         sx: int
@@ -47,7 +47,7 @@ def render_entity(game, window) -> None:
         ent_id: int
         ent_nr: int = 1
         for ent_id in ent_ids:
-            ent: dict[str: Any] = entities[ent_id]
+            ent: dict[str, Any] = entities[ent_id]
             str_list.append(f"entity {ent_nr} with id: {ent_id}")
             ent_nr += 1
             str_list.append(f" => has currently {len(ent)} components:")
@@ -71,22 +71,23 @@ def render_entity(game, window) -> None:
             if line_nr <= sy - 1:
                 window.addstr(line_nr, 1, line)
         window.refresh()
-        key: int = window.getch()
+        keypress: int = window.getch()
+        char: str
         for char in game.config["keyboard"]["debug_show_entity_info"]:
-            if key == ord(char):
-                break
+            if keypress == ord(char):
+                return
         for char in game.config["keyboard"]["debug_show_entity_info_scroll_up"]:
-            if key == ord(char):
+            if keypress == ord(char):
                 if not top_pos - 1 < 0:
                     top_pos += -1
         for char in game.config["keyboard"]["debug_show_entity_info_scroll_down"]:
-            if key == ord(char):
+            if keypress == ord(char):
                 if not top_pos + 1 > len(str_list) and len(str_list) - top_pos > sy:
                     top_pos += 1
 
 class DebugLog:
 
-    def __init__(max_amount: int = 1000) -> None:
+    def __init__(self, max_amount: int = 1000) -> None:
         self.max_amount: int = max_amount
         self.log_mgs_list: list[str] = list()
 
