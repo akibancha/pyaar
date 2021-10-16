@@ -201,8 +201,8 @@ class Fov(ecs.System):
             if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
                 end_time: float = time.time()
                 d_time: float = end_time - start_time
-                msg0: str = f" | | FovSystem was completet for entity with id: {self.ent_id} in {d_time} s"
-                self.pool.etc["game"].debug_log.add(msg0)
+                mgs0: str = f" | | FovSystem was completed for an entity with the id: {self.ent_id} in {d_time} seconds"
+                self.pool.etc["game"].debug_log.add(mgs0)
             Fov.lock.release()
 
     def update(self):
