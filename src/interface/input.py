@@ -27,7 +27,7 @@ def handle_input(game,
                                                           game)
                     game.pool.add_components_to_entity(component,
                                                        game.player_id)
-                    return
+                    return None
                 else:
                     py, px = game.pointer_pos
                     dpy, dpx = movement_vectors[k.replace("move_", "")]
@@ -80,7 +80,10 @@ def handle_input(game,
                     else:
                         log = f"<debug>: entity {new_fov_entity} does not have a field of view"
                         game.log.append(log)
+
             if "debug_show_entity_info" in k and key in v:
                 if not game.pointer_bound:
-                    interface.debug.render_entity(game=game,
-                                                  window=game.base_windows["std"])
+                    interface.debug.render_entity(game=game, window=game.base_windows["std"])
+            if "debug_show_log" in k and key in v:
+                if not game.pointer_bound:
+                    interface.debug.render_log(game=game, window=game.base_windows["std"])

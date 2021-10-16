@@ -1,6 +1,7 @@
 from interface.window import render_resize_msg
 from typing import Any, Tuple
 
+
 def render_entity(game, window) -> None:
 
     py: int
@@ -91,7 +92,53 @@ class DebugLog:
         self.max_amount: int = max_amount
         self.log_mgs_list: list[str] = list()
 
-    def add_log(self, log_mgs: str) -> None:
+    def add(self, log_mgs: str) -> None:
         if len(self.log_mgs_list) >= self.max_amount:
             del self.log_mgs_list[0]
         self.log_mgs_list.append(log_mgs)
+
+    def set_max_amount(self, max_amount: int) -> None:
+        self.max_amount = max_amount
+
+def render_log(game, window) -> None:
+
+    log_mgs: list[str] = game.debug_log.log_mgs_list
+
+    top_pos: int = 0
+
+    min_screen_size: Tuple[int, int]
+    min_screen_size = (game.config["screen_size"]["height"], game.config["screen_size"]["width"])
+    while True:
+        render_resize_msg(screen=window, min_size=min_screen_size, frames=60)
+        window.erase()
+
+        sy: int
+        sx: int
+        sy, sx = window.getmaxyx()
+
+        line_nr: int
+        line: str
+        for line_nr, line in enumerate(log_mgs[top_pos:], start=1):
+            if line_nr <= sy - 1:
+                window.addstr(line_nr, 1, line)
+        window.refresh()
+        keypress: int = window.getch()
+        char: str
+        for char in game.config["keyboard"]["debug_show_log"]:
+            if keypress == ord(char):
+                return
+        for char in game.config["keyboard"]["debug_show_log_scroll_up"]:
+            if keypress == ord(char):
+                if not top_pos - 1 < 0:
+                    top_pos += -1
+        for char in game.config["keyboard"]["debug_show_log_scroll_down"]:
+            if keypress == ord(char):
+                if not top_pos + 1 > len(log_mgs) and len(log_mgs) - top_pos > sy:
+                    top_pos += 1
+        for char in game.config["keyboard"]["debug_show_log_jump_to_top"]:
+            if keypress == ord(char):
+                top_pos = 0
+        for char in game.config["keyboard"]["debug_show_log_jump_to_bottom"]:
+            if keypress == ord(char):
+                top_pos = len(log_mgs) - sy
+

@@ -106,6 +106,26 @@
     "debug_show_entity_info_scroll_down":
     [
         "j"
+    ],
+    "debug_show_log":
+    [
+        "L"
+    ],
+    "debug_show_log_scroll_up":
+    [
+        "k"
+    ],
+    "debug_show_log_scroll_down":
+    [
+        "j"
+    ],
+    "debug_show_log_jump_to_top":
+    [
+        "g"
+    ],
+    "debug_show_log_jump_to_bottom":
+    [
+        "G"
     ]
   },
  
@@ -114,7 +134,7 @@
       "disable_collision": false,
       "enable_debug_log": true,
       "debug_log_mgs_amount": 5000,
-      "debug_log_mgs_system_report": false,
+      "debug_log_mgs_system_report": true,
       "keyboard_timeout": 400
     },
     "options": {

@@ -1,7 +1,7 @@
 from __future__ import annotations
 import json
 import os
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Any
 
 import ecs
 import init_colors
@@ -131,6 +131,8 @@ class Game:
         self.pointer_bound: bool = False
         # the entity focused by the pointer while bound
         self.pointer_entity: Optional[int] = None
+        # log for debug mgs
+        self.debug_log: interface.debug.DebugLog = interface.debug.DebugLog()
 
     def init_game_map(
         self,
@@ -141,6 +143,7 @@ class Game:
         This method initializes the game map. It creates the game map entity inside of
         self.pool and sets self.game_map and self.game_map_id to reference it.
 
+
         Parameters
         ----------
         height: int
@@ -150,6 +153,7 @@ class Game:
         """
 
         # define map entity
+        game_map: dict[str, list|int|bool]
         game_map = {
             # empty 2d list
             # will hold a list of entity ids: int for every (y, x) position
@@ -517,6 +521,9 @@ class Game:
 
         with open(config_file, "r") as config:
             self.config = json.load(config)
+
+        max_debug_amount: int = self.config["debug"]["debug_log_mgs_amount"]
+        self.debug_log.set_max_amount(max_debug_amount)
 
     def save_config(
         self,

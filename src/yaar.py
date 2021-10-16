@@ -43,7 +43,7 @@ def main(screen) -> None:
     player_b = {"name": "player",
                 "char": [["@", "white", "green"]],
                 "movement_cost": 15,
-                "unpassable": True,
+                "blocks_path": True,
                 "update_fov": True,
                 "FOV": True}
 
@@ -80,11 +80,6 @@ def main(screen) -> None:
         name="perform",
         layer=0
     )
-    test.pool.add_system(
-        system=systems.simple_ai.Simple_Ai_System,
-        name="simple_ai",
-        layer=1
-    )
 
     # welcome log msg
     test.log.append("Welcome!")
@@ -98,6 +93,7 @@ def main(screen) -> None:
     screen.idcok(test.config["options"]["enable_idcok"])
 
     # init entity fovs
+    test.debug_log.add(":: init entity fovs ::")
     test.pool.update(["fov"])
 
     test.pointer_bound = True
