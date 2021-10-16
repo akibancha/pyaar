@@ -201,8 +201,12 @@ class Fov(ecs.System):
             if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
                 end_time: float = time.time()
                 d_time: float = end_time - start_time
-                mgs0: str = f" | | FovSystem was completed for an entity with the id: {self.ent_id} in {d_time} seconds"
+                mgs0: str = f" | | FovSystem was completed for <entity {self.ent_id}> in {d_time} seconds"
+                mgs1: str = f" | | Fov: {fov_set}"
+                mgs2: str = " | | "
                 self.pool.etc["game"].debug_log.add(mgs0)
+                self.pool.etc["game"].debug_log.add(mgs1)
+                self.pool.etc["game"].debug_log.add(mgs2)
             Fov.lock.release()
 
     def update(self):
@@ -216,7 +220,7 @@ class Fov(ecs.System):
             self.pool.etc["game"].debug_log.add("###")
             mgs0: str = f" | UpdateCycle: {cycle} :: FovSystem started"
             self.pool.etc["game"].debug_log.add(mgs0)
-            self.pool.etc["game"].debug_log.add("----")
+            self.pool.etc["game"].debug_log.add(" | | ")
             
         ent_id: int
         for ent_id in self.act_on(["FOV", "update_fov", "pos"]):
@@ -231,19 +235,21 @@ class Fov(ecs.System):
                                          pos=(py, px),
                                          tile_map=tile_map,
                                          pool=self.pool))
+
         if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
             if threads == []:
                 self.pool.etc["game"].debug_log.add(" | | I had nothing to do!")
+                self.pool.etc["game"].debug_log.add(" | | ")
 
-        for thread in threads:
-            thread.start()
-        for thread in threads:
-            thread.join()
+        if threads != []:
+            for thread in threads:
+                thread.start()
+            for thread in threads:
+                thread.join()
 
         if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
             end_time: float = time.time()
             d_time: float = end_time - start_time
             mgs0: str = f" | UpdateCycle: {cycle} :: FovSystem finished in {d_time} seconds"
-            self.pool.etc["game"].debug_log.add("----")
             self.pool.etc["game"].debug_log.add(mgs0)
 

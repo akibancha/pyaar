@@ -118,9 +118,9 @@ def render_log(game, window) -> None:
 
         line_nr: int
         line: str
-        for line_nr, line in enumerate(log_mgs[top_pos:], start=1):
+        for line_nr, line in enumerate(log_mgs[top_pos:], start=0):
             if line_nr <= sy - 1:
-                window.addstr(line_nr, 1, line)
+                window.addstr(line_nr, 1, line[:sx - 3])
         window.refresh()
         keypress: int = window.getch()
         char: str
