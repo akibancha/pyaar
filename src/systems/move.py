@@ -36,9 +36,19 @@ class MoveSystem(ecs.System):
             if not name:
                 name = f"<entity {e_id}>"
 
+            if (dy not in range(self.pool.etc["game"].game_map["map_height"]) or
+                dx not in range(self.pool.etc["game"].game_map["map_width"])):
+                return
+
             ent_in: int
             for ent_in in self.entities[map_id]["map_array"][dy][dx]:
-                if self.entities[ent_in].get("blocks_path") and not self.pool.etc["game"].config["debug"]["disable_collision"]:
+                if self.entities[ent_in].get("player"):
+                    self.pool.etc["game"].log.append(f"{name} wants some pets")
+                    break
+
+                if (self.entities[ent_in].get("blocks_path")
+                    and not self.pool.etc["game"].config["debug"]["disable_collision"]
+                    and not ent_in == e_id):
 
                     tile: dict[str, Any] = self.entities[ent_in]
                     tile_name: Optional[str] = tile.get("name")

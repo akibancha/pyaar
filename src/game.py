@@ -254,15 +254,15 @@ class Game:
         ----------
         pos: Tuple[int, int]
             The position coordinate the entity should be placed on.
-        entity_id: Optional[int], optional
+        entity_id: Optional[int]
             The entity id of the entity you want to place. (In case you want to
             place an already existing entity)
-        chapter: Optional[str], optional
+        chapter: Optional[str]
             The chapter the blueprint that should be used to create the entity
             is located in.
-        blueprint: Optional[str], optional
+        blueprint: Optional[str]
             The blueprint that should be used to create the entity
-        add_pos_comp: Optional[bool], optional
+        add_pos_comp: Optional[bool]
             Set this to True in case you want to give a position component
             to the entity. This also updates the component of an
             existing entity in case it has already one.

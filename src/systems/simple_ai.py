@@ -5,52 +5,68 @@ from typing import Tuple
 import ecs
 
 
+def manhattan_distance(start: Tuple[int, int], end: Tuple[int, int]) -> int:
+    start_y, start_x = start
+    end_y, end_x = end
+    return abs(start_y - end_y) + abs(start_x - end_x)
+
+
 def a_star(game,
            start_pos: Tuple[int, int],
-           target_pos: Tuple[int, int]):
+           target_pos: Tuple[int, int]
+):
 
     # TODO fix pathfinding
     game_map = game.game_map
     path_nodes = game_map["path_nodes"]
-    # start node = start_pos
-    # end node = target_pos
+
     start_y, start_x = start_pos
     end_y, end_x = target_pos
-    g_dict = {node: float('inf') for node in path_nodes}
-    f_dict = {node: float('inf') for node in path_nodes}
+
+    step_dict = {}
+    heu_dict = {}
+    parent_dict = {}
+
     open_list = list()
     closed_list = list()
-    g_dict[start_pos] = 0
-    f_dict[start_pos] = abs(start_y - end_y) + abs(start_x - end_x)
+
+    step_dict[start_pos] = 0
+
+    heu_dict[start_pos] = manhattan_distance(start_pos, target_pos)
+
     open_list.append(start_pos)
+
     while open_list:
-        current_node = min(open_list, key=f_dict.get)
-        closed_list.append(current_node)
-        open_list.remove(current_node)
-        if current_node == target_pos:
-            path = list()
-            while current_node != start_pos:
-                path.append(current_node)
-                current_node = path_nodes[current_node]["parent"]
+        current_point: Tuple[int, int] = min(open_list, key=heu_dict.get)
+        closed_list.append(current_point)
+        open_list.remove(current_point)
+
+        if current_point == target_pos:
+            path = []
+            while current_point != start_pos:
+                path.append(current_point)
+                current_point = parent_dict[current_point]
             return path
-        cy, cx = current_node
-        for neighbour in path_nodes[current_node]["neighbours"]:
-            ny, nx = neighbour
-            for meid in game_map["map_array"][ny][nx]:
-                if game.pool.entities[meid].get("unpassable"):
+
+        for neighbour in game_map["path_nodes"][current_point]["neighbours"]:
+            neighbour_y, neighbour_x = neighbour
+            for entity_id in game_map["map_array"][neighbour_y][neighbour_x]:
+                if game.pool.entities[entity_id].get("blocks_path"):
                     break
-                g = g_dict[current_node] + 1
-                f = f_dict[current_node] = (g_dict[current_node] +
-                                            abs(cy - end_y) + abs(cx - end_x))
+            else:
+                steps = step_dict[current_point] + 1
                 if neighbour in open_list:
-                    if g_dict[neighbour] > g:
-                        g_dict[neighbour] = g
-                        path_nodes[neighbour]["parent"] = current_node
-                if neighbour not in open_list and neighbour not in closed_list:
+                    if step_dict[neighbour] > steps:
+                        step_dict[neighbour] = steps
+                        parent_dict[neighbour] = current_point
+                elif neighbour not in closed_list:
+                    step_dict[neighbour] = steps
+                    heu_dict[neighbour] = steps + manhattan_distance(
+                        neighbour,
+                        target_pos
+                    )
+                    parent_dict[neighbour] = current_point
                     open_list.append(neighbour)
-                    g_dict[neighbour] = g
-                    f_dict[neighbour] = f
-                    path_nodes[neighbour]["parent"] = current_node
 
 
 class Simple_Ai_System(ecs.System):
@@ -71,14 +87,17 @@ class Simple_Ai_System(ecs.System):
                           start_pos=self.spos,
                           target_pos=self.tpos)
             if path:
+                ty, tx = self.tpos
                 sy, sx = self.spos
                 py, px = path[-1]
+
                 velo = {"velo": (py - sy, px - sx)}
             else:
+                self.pool.etc["game"].log.append(f"<entity: {self.ent_id}> has no path")
                 velo = {"velo": (random.randint(-1, 1),
                                  random.randint(-1, 1))}
-            movemen_cost = self.pool.entities[self.ent_id].get("movement_cost")
-            perform = {"Perform": {"round": (0, movemen_cost),
+            movement_cost = self.pool.entities[self.ent_id].get("movement_cost")
+            perform = {"Perform": {"round": (0, movement_cost),
                        "components": velo}}
             self.pool.add_components_to_entity(perform, self.ent_id)
 

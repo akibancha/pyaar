@@ -33,6 +33,6 @@ def create_actor(blueprint: dict) -> dict:
         blueprint["movement_cost"] = random.randint(min_cost, max_cost)
 
     if name_string:
-        blueprint["name_string"] = " ".join(name_string)
+        blueprint["name"] = " ".join(name_string)
 
     return blueprint

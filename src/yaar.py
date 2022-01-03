@@ -2,7 +2,7 @@ import curses
 import random
 
 import game_map
-import game
+from game import Game
 
 import systems.move
 import systems.fov
@@ -23,27 +23,21 @@ def main(screen) -> None:
     curses.curs_set(False)
 
     # create game class
-    test = game.Game()
+    test = Game()
 
     # init blueprints
     test.init_blueprints()
 
     # init test game map
-    test.init_game_map(
-        height=50,
-        width=50
-    )
+    test.init_game_map(height=50, width=50)
 
-    game_map.create_map(
-        game=test,
-        level=1
-    )
+    game_map.create_map(game=test, level=1)
 
     # init test player
     player_b = {"name": "player",
+                "player": True,
                 "char": [["@", "white", "green"]],
                 "movement_cost": 15,
-                "blocks_path": True,
                 "update_fov": True,
                 "FOV": True}
 
@@ -80,6 +74,12 @@ def main(screen) -> None:
         name="perform",
         layer=0
     )
+    test.pool.add_system(
+        system=systems.simple_ai.Simple_Ai_System,
+        name="simple_ai",
+        layer=0
+    )
+
 
     # welcome log msg
     test.log.append("Welcome!")
@@ -98,6 +98,7 @@ def main(screen) -> None:
 
     test.pointer_bound = True
     test.pointer_entity = test.player_id
+
     # game loop
     while test.state != "exit":
 
