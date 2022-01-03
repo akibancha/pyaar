@@ -6,7 +6,7 @@
         "char": [["r", "red", "black"]],
         "movement_range": [16, 20],
         "hp_range": [5, 8],
-        "unpassable": true,
+        "blocks_path": true,
         "update_fov": true,
         "FOV":true,
         "simple_ai": true}
