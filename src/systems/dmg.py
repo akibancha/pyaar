@@ -1,0 +1,20 @@
+#!/usr/bin/env python3
+
+import ecs
+
+class DmgSystem(ecs.System):
+
+    def update(self):
+
+        for entity_id in self.act_on(["health", "dmg"]):
+
+            ent = self.pool.entities[entity_id]
+            max_hp = ent["health"]["max_hp"]
+            current_hp = ent["health"]["current_hp"]
+            dmg = ent["dmg"]["amount"]
+
+            if current_hp - dmg > 0:
+                self.pool.etc["game"].log.append(f"{ent['name']} took {dmg} dmg!")
+                ent["health"]["current_hp"] = current_hp - dmg
+            else:
+                self.pool.add_components_to_entity({"dead": True}, entity_id)
