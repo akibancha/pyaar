@@ -8,6 +8,8 @@ import systems.move
 import systems.fov
 import systems.perform
 import systems.simple_ai
+import systems.dmg
+import systems.die
 
 
 def main(screen) -> None:
@@ -78,6 +80,16 @@ def main(screen) -> None:
         system=systems.simple_ai.Simple_Ai_System,
         name="simple_ai",
         layer=0
+    )
+    test.pool.add_system(
+        system=systems.dmg.DmgSystem,
+        name="dmg",
+        layer=3
+    )
+    test.pool.add_system(
+        system=systems.die.DieSystem,
+        name="die",
+        layer=4
     )
 
 

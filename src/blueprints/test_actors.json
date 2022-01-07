@@ -1,9 +1,14 @@
 {
     "bored_rat": {
         "entity_type": "rat",
+        "enemy": true,
         "names": ["Kra", "Xaxa", "Siief", "Quee", "Scaaf", "Frai", "Quaae"],
         "attributes": ["bloody", "cruel", "slow", "crazy", "stoned", "bored", "dirty", "wet", "lazy"],
         "char": [["r", "red", "black"]],
+        "dead_body": {
+                "char": "ø",
+                "name": "Body of "
+        },
         "movement_range": [16, 20],
         "hp_range": [5, 8],
         "blocks_path": true,

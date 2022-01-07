@@ -59,6 +59,13 @@ class MoveSystem(ecs.System):
                     and not self.pool.etc["game"].config["debug"]["disable_collision"]
                     and not ent_in == e_id):
 
+                    if ent.get("player") and self.entities[ent_in].get("enemy"):
+                        # function for dmg
+                        self.pool.etc["game"].log.append(f"{name} attacks {self.entities[ent_in]['name']}")
+                        self.pool.add_components_to_entity({"dmg": {"amount": 4}}, ent_in)
+                        break
+
+
                     tile = self.entities[ent_in]
                     tile_name = tile.get("name")
 
@@ -70,7 +77,6 @@ class MoveSystem(ecs.System):
                     if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
                         mgs0 = f" | | <entity {e_id}> could not move to target: The target is not passable."
                         self.pool.etc["game"].debug_log.add(mgs0)
-
 
 
                     log = f"{name} bumps into {log_role} ({tile_name})"

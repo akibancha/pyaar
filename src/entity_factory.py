@@ -1,7 +1,11 @@
 import random
+import copy
 
 
-def create_actor(blueprint: dict) -> dict:
+def create_actor(input_blueprint: dict) -> dict:
+
+
+    blueprint = copy.deepcopy(input_blueprint)
 
     names = blueprint.get("names")
     attributes = blueprint.get("attributes")
@@ -23,10 +27,10 @@ def create_actor(blueprint: dict) -> dict:
 
     if hp_range:
         min_hp, max_hp = hp_range
-        hp = random.randint(min_hp, min_hp)
+        hp = random.randint(min_hp, max_hp)
         hp_component = {"max_hp": hp,
                         "current_hp": hp}
-        blueprint["hp"] = hp_component
+        blueprint["health"] = hp_component
 
     if movment_range:
         min_cost, max_cost = movment_range
@@ -34,5 +38,11 @@ def create_actor(blueprint: dict) -> dict:
 
     if name_string:
         blueprint["name"] = " ".join(name_string)
+
+    if blueprint.get("dead_body"):
+        if blueprint.get("name"):
+            blueprint["dead_body"]["name"] += blueprint["name"]
+        else:
+            blueprint["dead_body"]["name"] += "an unnamed entity"
 
     return blueprint
