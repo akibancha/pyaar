@@ -5,7 +5,7 @@ class DieSystem(ecs.System):
 
     def update(self):
 
-        for entity_id in self.act_on(["dead"]):
+        for entity_id in self.act_on(["died"]):
 
             ent = self.entities[entity_id]
 
@@ -18,3 +18,8 @@ class DieSystem(ecs.System):
 
             if ent.get("block_path"):
                 self.pool.remove_component_from_entity("blocks_path", entity_id)
+
+            if ent.get("Perform"):
+                self.pool.remove_component_from_entity("Perform", entity_id)
+
+            self.pool.remove_component_from_entity("died", entity_id)
