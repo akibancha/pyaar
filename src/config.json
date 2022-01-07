@@ -119,6 +119,20 @@
     [
         "j"
     ],
+    "debug_show_log_scroll_right":
+    [
+        "l"
+    ],
+    "debug_show_log_scroll_left":
+    [
+
+        "h"
+    ],
+    "debug_show_log_jump_to_line_begin":
+    [
+
+        "H"
+    ],
     "debug_show_log_jump_to_top":
     [
         "g"
