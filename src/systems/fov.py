@@ -201,11 +201,12 @@ class Fov(ecs.System):
             if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
                 end_time: float = time.time()
                 d_time: float = end_time - start_time
-                mgs0: str = f" | | FovSystem was completed for <entity {self.ent_id}> in {d_time} seconds"
-                mgs1: str = f" | | Fov: {fov_set}"
+                self.pool.etc["game"].debug_log.add(f" | | <entity {self.ent_id}> on pos: {self.ent_pos}")
+                mgs1: str = f" | | <entity {self.ent_id}> can see: {fov_set}"
+                mgs0: str = f" | | <entity {self.ent_id}> System completed in {d_time} seconds"
                 mgs2: str = " | | "
-                self.pool.etc["game"].debug_log.add(mgs0)
                 self.pool.etc["game"].debug_log.add(mgs1)
+                self.pool.etc["game"].debug_log.add(mgs0)
                 self.pool.etc["game"].debug_log.add(mgs2)
             Fov.lock.release()
 
@@ -252,4 +253,4 @@ class Fov(ecs.System):
             d_time: float = end_time - start_time
             mgs0: str = f" | UpdateCycle: {cycle} :: FovSystem finished in {d_time} seconds"
             self.pool.etc["game"].debug_log.add(mgs0)
-
+            self.pool.etc["game"].debug_log.add(" |")

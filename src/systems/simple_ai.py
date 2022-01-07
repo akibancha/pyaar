@@ -1,5 +1,6 @@
 import random
 import threading
+import time
 
 from typing import Tuple
 import ecs
@@ -83,6 +84,13 @@ class Simple_Ai_System(ecs.System):
             self.pool = pool
 
         def run(self):
+
+            Simple_Ai_System.testlock.acquire()
+            start_time = time.time()
+            if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
+                mgs0 = f" | | | <entity {self.ent_id}> will try to find a path towards the player."
+                self.pool.etc["game"].debug_log.add(mgs0)
+
             path = a_star(game=self.pool.etc["game"],
                           start_pos=self.spos,
                           target_pos=self.tpos)
@@ -92,14 +100,30 @@ class Simple_Ai_System(ecs.System):
                 py, px = path[-1]
 
                 velo = {"velo": (py - sy, px - sx)}
+                if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
+                    mgs0 = f" | | | <entity {self.ent_id}> did find a path towards the player."
+                    self.pool.etc["game"].debug_log.add(mgs0)
+                    self.pool.etc["game"].debug_log.add(f" | | | <entity {self.ent_id}> path: {path}")
+                    self.pool.etc["game"].debug_log.add(f" | | | <entity {self.ent_id}> will try to move to {py, px}")
+
+
             else:
-                self.pool.etc["game"].log.append(f"<entity: {self.ent_id}> has no path")
                 velo = {"velo": (random.randint(-1, 1),
                                  random.randint(-1, 1))}
+                if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
+                    mgs0 = f" | | | <entity {self.ent_id}> did not find a path towards the player, it will move in a random direction instead. {velo}"
+                    self.pool.etc["game"].debug_log.add(mgs0)
+                    self.pool.etc["game"].debug_log.add(" | |")
             movement_cost = self.pool.entities[self.ent_id].get("movement_cost")
             perform = {"Perform": {"round": (0, movement_cost),
                        "components": velo}}
+
+            if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
+                    mgs0 = f" | | | <entity {self.ent_id}> pathfinding finished in {time.time() - start_time} seconds."
+                    self.pool.etc["game"].debug_log.add(mgs0)
+                    self.pool.etc["game"].debug_log.add(" | |")
             self.pool.add_components_to_entity(perform, self.ent_id)
+            Simple_Ai_System.testlock.release()
 
     def update(self):
 
@@ -111,7 +135,17 @@ class Simple_Ai_System(ecs.System):
         else:
             return
 
+        if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
+            global_start_time: float = time.time()
+            cycle: int = self.pool.etc["game"].round
+            self.pool.etc["game"].debug_log.add("###")
+            mgs0: str = f" | UpdateCycle: {cycle} :: SimpleAiSystem started"
+            self.pool.etc["game"].debug_log.add(mgs0)
+            self.pool.etc["game"].debug_log.add(" | | ")
+
+
         threads = []
+        can_not_see = []
 
         for entity_id in self.act_on(["simple_ai", "FOV",
                                       "pos", "movement_cost"]):
@@ -126,19 +160,43 @@ class Simple_Ai_System(ecs.System):
             ey, ex, _ = ent_pos
 
             if player_pos in ent_fov:
+
+                if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
+                    mgs0 = f" | | <entity {entity_id}> can see the player. It will try to move towards the player or attack them."
+                    self.pool.etc["game"].debug_log.add(mgs0)
                 threads.append(Simple_Ai_System.PFThread(ent_id=entity_id,
                                                          spos=(ey, ex),
                                                          tpos=player_pos,
                                                          pool=self.pool))
 
             else:
+                can_not_see.append(entity_id)
                 velo = {"velo": (random.randint(-1, 1), random.randint(-1, 1))}
+                if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
+                    mgs0 = f" | | <entity {entity_id}> can not see the player. It will try to move in a random direction: {velo}"
+                    self.pool.etc["game"].debug_log.add(mgs0)
+                    self.pool.etc["game"].debug_log.add(" | |")
                 perform = {"Perform": {"round": (0, 20),
                            "components": velo}}
                 self.pool.add_components_to_entity(perform, entity_id)
 
+        if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
+            if threads == [] and can_not_see == []:
+                self.pool.etc["game"].debug_log.add(" | | I had nothing to do!")
+                self.pool.etc["game"].debug_log.add(" | | ")
+
         if threads:
+            if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
+                self.pool.etc["game"].debug_log.add(" | |")
+                mgs0 = f" | | pathfinding threads will be started:"
+                self.pool.etc["game"].debug_log.add(mgs0)
+                self.pool.etc["game"].debug_log.add(" | |")
             for t in threads:
                 t.start()
             for t in threads:
                 t.join()
+
+        if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
+            mgs0: str = f" | UpdateCycle: {cycle} :: FovSystem finished in {time.time() - global_start_time} seconds."
+            self.pool.etc["game"].debug_log.add(mgs0)
+            self.pool.etc["game"].debug_log.add(" |")

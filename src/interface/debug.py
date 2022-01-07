@@ -108,6 +108,7 @@ def render_log(game, window) -> None:
 
     min_screen_size: Tuple[int, int]
     min_screen_size = (game.config["screen_size"]["height"], game.config["screen_size"]["width"])
+    line_render_pos = 0
     while True:
         render_resize_msg(screen=window, min_size=min_screen_size, frames=60)
         window.erase()
@@ -120,12 +121,13 @@ def render_log(game, window) -> None:
         line: str
         for line_nr, line in enumerate(log_mgs[top_pos:], start=0):
             if line_nr <= sy - 1:
-                window.addstr(line_nr, 1, line[:sx - 3])
+                window.addstr(line_nr, 1, line[line_render_pos:sx + line_render_pos - 3])
         window.refresh()
         keypress: int = window.getch()
         char: str
         for char in game.config["keyboard"]["debug_show_log"]:
             if keypress == ord(char):
+                window.erase()
                 return
         for char in game.config["keyboard"]["debug_show_log_scroll_up"]:
             if keypress == ord(char):
@@ -141,4 +143,15 @@ def render_log(game, window) -> None:
         for char in game.config["keyboard"]["debug_show_log_jump_to_bottom"]:
             if keypress == ord(char):
                 top_pos = len(log_mgs) - sy
-
+        for char in game.config["keyboard"]["debug_show_log_scroll_right"]:
+            if keypress == ord(char):
+                line_render_pos += 1
+        for char in game.config["keyboard"]["debug_show_log_scroll_left"]:
+            if keypress == ord(char):
+                if line_render_pos - 1 < 0:
+                    line_render_pos = 0
+                else:
+                    line_render_pos += -1
+        for char in game.config["keyboard"]["debug_show_log_jump_to_line_begin"]:
+            if keypress == ord(char):
+                line_render_pos = 0
