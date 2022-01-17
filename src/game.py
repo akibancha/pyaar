@@ -265,7 +265,7 @@ class Game:
         add_pos_comp: Optional[bool]
             Set this to True in case you want to give a position component
             to the entity. This also updates the component of an
-            existing entity in case it has already one.
+            existing entity in case it already has one.
 
         Returns
         -------
