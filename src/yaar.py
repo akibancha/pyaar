@@ -116,6 +116,8 @@ def main(screen) -> None:
     # game loop
     while test.state != "exit":
 
+        if test.player.get("dead"):
+            test.state = "game_over"
         # render screen
         test.perform_render(screen)
 

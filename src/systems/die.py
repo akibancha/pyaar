@@ -34,3 +34,7 @@ class DieSystem(ecs.System):
                         component,
                         entity_id
                     )
+            self.pool.add_components_to_entity(
+                {"dead": True},
+                entity_id
+            )

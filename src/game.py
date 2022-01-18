@@ -12,6 +12,7 @@ import interface.input
 import interface.render_log
 import entity_factory
 import helpers.tilemap
+import interface.game_over
 
 
 class Game:
@@ -498,6 +499,25 @@ class Game:
                 fov=True,
                 fov_entity=self.pointer_entity,
                 pointer_pos=self.pointer_pos
+            )
+        elif self.state == "game_over":
+            interface.window.render_resize_msg(
+                min_size=(24, 80),
+                screen=screen,
+                frames=60
+            )
+            interface.window.set_base_windows(
+                screen=screen,
+                refresh=True,
+                game=self
+            )
+            interface.render_log.render(
+                map_window=self.base_windows["log"],
+                game=self
+            )
+            interface.game_over.render_game_over(
+                window=self.base_windows["map"],
+                game=self
             )
 
     def init_blueprints(self) -> None:
