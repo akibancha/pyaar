@@ -7,10 +7,10 @@
         "char": [["r", "red", "black"]],
         "dead_body": {
                 "char": "ø",
-                "name": "Body of "
+                "name": "The body of "
         },
         "movement_range": [16, 20],
-        "hp_range": [5, 8],
+        "hp_range": [8, 16],
         "blocks_path": true,
         "update_fov": true,
         "FOV":true,

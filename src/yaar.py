@@ -39,7 +39,9 @@ def main(screen) -> None:
     player_b = {"name": "player",
                 "player": True,
                 "char": [["@", "white", "green"]],
-                "movement_cost": 15,
+                "movement_cost": 10,
+                "health": {"max_hp": 15, "current_hp":15},
+                "dead_body": {"char": "ħ", "name": "The Body of"},
                 "update_fov": True,
                 "FOV": True}
 

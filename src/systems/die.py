@@ -14,9 +14,16 @@ class DieSystem(ecs.System):
                 "blocks_path",
                 "Perform",
                 "died",
-                "enemy"
+                "enemy",
+                "health",
+                "dmg"
             ]
-            
+
+            name = ent.get("name")
+            if not name:
+                name = f"<enitiy: {entity_id}>"
+                
+            self.pool.etc["game"].log.append(f"{name} has died!")
             if ent.get("dead_body"):
                 ent["name"] = ent["dead_body"]["name"]
                 ent["char"][0][0] = ent["dead_body"]["char"]
