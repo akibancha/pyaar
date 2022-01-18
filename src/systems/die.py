@@ -21,7 +21,7 @@ class DieSystem(ecs.System):
 
             name = ent.get("name")
             if not name:
-                name = f"<enitiy: {entity_id}>"
+                name = f"<entity: {entity_id}>"
                 
             self.pool.etc["game"].log.append(f"{name} has died!")
             if ent.get("dead_body"):
