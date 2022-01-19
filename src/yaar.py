@@ -38,6 +38,7 @@ def main(screen) -> None:
     # init test player
     player_b = {"name": "Aki",
                 "player": True,
+                "inventory": {"slots": 4, "items": []},
                 "char": [["@", "white", "green"]],
                 "movement_cost": 10,
                 "health": {"max_hp": 15, "current_hp":15},

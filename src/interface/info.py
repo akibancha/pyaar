@@ -11,9 +11,9 @@ def render_info_window(window, game):
     line = 1
     infos = [
         "---[Stats]---",
-        f"HP: {current_hp}/{max_hp}",
+        f"HP: {current_hp} / {max_hp}",
         "MP: not inplemented",
-        "Inventory slots: not implemented",
+        f"Inventory slots: {len(game.player['inventory']['items'])} / {game.player['inventory']['slots']}",
         f"Movement cost: {game.player['movement_cost']}",
         "Action cost: not implemented",
         "---[Equipment]---",
