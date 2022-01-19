@@ -13,6 +13,7 @@ import interface.render_log
 import entity_factory
 import helpers.tilemap
 import interface.game_over
+import interface.info
 
 
 class Game:
@@ -500,6 +501,12 @@ class Game:
                 fov_entity=self.pointer_entity,
                 pointer_pos=self.pointer_pos
             )
+            interface.info.render_info_window(
+                window=self.base_windows["info"],
+                game=self
+            )
+
+            
         elif self.state == "game_over":
             interface.window.render_resize_msg(
                 min_size=(24, 80),

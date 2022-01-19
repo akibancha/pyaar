@@ -36,7 +36,7 @@ def main(screen) -> None:
     game_map.create_map(game=test, level=1)
 
     # init test player
-    player_b = {"name": "player",
+    player_b = {"name": "Aki",
                 "player": True,
                 "char": [["@", "white", "green"]],
                 "movement_cost": 10,
