@@ -4,6 +4,7 @@ import time
 import ecs
 
 
+
 class MoveSystem(ecs.System):
 
     def update(self):
@@ -55,7 +56,9 @@ class MoveSystem(ecs.System):
                 if self.entities[ent_in].get("enemy") and ent_in != e_id or self.entities[ent_in].get("player"):
                     # function for dmg
                     self.pool.etc["game"].log.append(f"{name} attacks {self.entities[ent_in]['name']}")
-                    self.pool.add_components_to_entity({"dmg": {"amount": 4}}, ent_in)
+                    dmg_component = self.create_dmg_component(4)
+                    if dmg_component:
+                        self.pool.add_components_to_entity(dmg_component, ent_in)
                     break
 
                 if (self.entities[ent_in].get("blocks_path")
@@ -102,6 +105,11 @@ class MoveSystem(ecs.System):
 
 
         if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
-            mgs0: str = f" | UpdateCycle: {cycle} :: MoveSystem finished in {time.time()- global_start_time} seconds"
+            mgs0: str = f" | UpdateCycle: {cycle} :: MoveSystem finished in {time.time() - global_start_time} seconds"
             self.pool.etc["game"].debug_log.add(mgs0)
             self.pool.etc["game"].debug_log.add(" |")
+
+    def create_dmg_component(self, dmg_value: int) -> dict[str, int]:
+        # TODO make this more complex
+        dmg_component = {"dmg": {"amount": dmg_value}}
+        return dmg_component
