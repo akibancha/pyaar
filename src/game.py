@@ -533,14 +533,13 @@ class Game:
         This method initializes the blueprint book.
         """
 
-        id = 0
         self.blueprints = dict()
         for chapter in os.listdir("blueprints"):
             with open("blueprints/" + chapter, "r") as f:
-                self.blueprints[chapter.replace(".json", "")] = json.load(f)
-            for key in self.blueprints[chapter.replace(".json", "")].values():
-                key["blueprint_id"] = id
-                id += 1
+                chapter_str = chapter.replace(".json", "")
+                self.blueprints[chapter_str] = json.load(f)
+            for k, v in self.blueprints[chapter_str].items():
+                v["chapter/blueprint"] = f"{chapter_str}/{k}"
 
     def load_config(
         self,
