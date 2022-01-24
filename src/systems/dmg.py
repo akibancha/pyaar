@@ -13,8 +13,8 @@ class DmgSystem(ecs.System):
             current_hp = ent["health"]["current_hp"]
             dmg = ent["dmg"]["amount"]
 
+            self.pool.etc["game"].log.append(f"{ent['name']} took {dmg} dmg!")
             if current_hp - dmg > 0:
-                self.pool.etc["game"].log.append(f"{ent['name']} took {dmg} dmg!")
                 ent["health"]["current_hp"] = current_hp - dmg
                 self.pool.remove_component_from_entity("dmg", entity_id)
             else:

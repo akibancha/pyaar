@@ -56,7 +56,7 @@ class MoveSystem(ecs.System):
                 if self.entities[ent_in].get("enemy") and ent_in != e_id or self.entities[ent_in].get("player"):
                     # function for dmg
                     self.pool.etc["game"].log.append(f"{name} attacks {self.entities[ent_in]['name']}")
-                    dmg_component = self.create_dmg_component(4)
+                    dmg_component = self.create_dmg_component(e_id, ent_in)
                     if dmg_component:
                         self.pool.add_components_to_entity(dmg_component, ent_in)
                     break
@@ -109,7 +109,26 @@ class MoveSystem(ecs.System):
             self.pool.etc["game"].debug_log.add(mgs0)
             self.pool.etc["game"].debug_log.add(" |")
 
-    def create_dmg_component(self, dmg_value: int) -> dict[str, int]:
+    def create_dmg_component(
+            self,
+            attacker_id: int,
+            target_id: int
+    ) -> dict[str, dict[str, int]]:
         # TODO make this more complex
+        attacker_ent = self.pool.entities[attacker_id]
+        target_ent = self.pool.entities[target_id]
+
+        attacker_equipment = attacker_ent.get("equipment")
+        if attacker_equipment:
+            attacker_weapon_id = attacker_equipment.get("weapon")
+            if attacker_weapon_id:
+                attacker_weapon = self.pool.entities[attacker_weapon_id]
+                dmg_value = attacker_weapon["dmg_value"]
+            else:
+                # TODO value for weaponless dmg
+                dmg_value = 1
+        else:
+            # TODO value for dmg without equipment
+            dmg_value = 4
         dmg_component = {"dmg": {"amount": dmg_value}}
         return dmg_component

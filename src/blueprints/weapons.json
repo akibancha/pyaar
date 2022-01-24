@@ -1,0 +1,10 @@
+{
+    "old_axe": {
+	"name": "old axe",
+	"item": true,
+	"weapon": true,
+	"char": [["/", "blue", "black"]],
+	"attack_cost": 15,
+	"dmg_value": 10
+    }
+}

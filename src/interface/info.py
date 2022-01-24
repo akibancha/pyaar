@@ -7,6 +7,23 @@ def render_info_window(window, game):
     name = game.player["name"]
     current_hp = game.player["health"]["current_hp"]
     max_hp = game.player["health"]["max_hp"]
+    weapon = game.player["equipment"].get("weapon")
+    armor = game.player["equipment"].get("armor")
+    torch = game.player["equipment"].get("torch")
+    if weapon:
+        weapon = game.pool.entities[weapon]["name"]
+    else:
+        weapon = "none"
+    if armor:
+        armor = game.pool.entities[armor]["name"]
+    else:
+        armor = "none"
+    if torch:
+        torch = game.pool.entities[torch]["name"]
+    else:
+        torch = "none"
+
+
 
     line = 1
     infos = [
@@ -17,9 +34,9 @@ def render_info_window(window, game):
         f"Movement cost: {game.player['movement_cost']}",
         "Action cost: not implemented",
         "---[Equipment]---",
-        "Armor: not implemented",
-        "Weapon: not implemented",
-        "Torch: not implemented",
+        f"Weapon: {weapon}",
+        f"Armor: {armor}",
+        f"Torch: {torch}",
         "---[Status]---",
         "not implemented"
     ]
