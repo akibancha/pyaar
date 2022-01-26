@@ -1,0 +1,10 @@
+{
+    "dirty_fur": {
+	"name": "dirty fur",
+	"item": false,
+	"armor": true,
+	"char": false,
+	"movement_modi": 0,
+	"armor_value": 4
+    }
+}

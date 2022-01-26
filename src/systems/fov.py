@@ -8,7 +8,7 @@ import time
 import ecs
 
 
-# implementation of https://www.albertford.com/shadowcasting/
+# implementation of aka stolen from https://www.albertford.com/shadowcasting/
 
 class Quarant:
 
@@ -92,7 +92,12 @@ def round_ties_down(n: Fraction) -> int:
     return math.ceil(n - 0.5)
 
 
-def calc_fov(ori: Tuple[int, int], tile_map: dict[str, Any], entities: dict[int, dict[str, Any]]) -> set[Tuple[int, int]]:
+def calc_fov(
+        entity_id: int,
+        ori: Tuple[int, int],
+        tile_map: dict[str, Any],
+        entities: dict[int, dict[str, Any]]
+) -> set[Tuple[int, int]]:
 
     py: int
     px: int
@@ -100,6 +105,12 @@ def calc_fov(ori: Tuple[int, int], tile_map: dict[str, Any], entities: dict[int,
 
     fov: set[Tuple[int, int]] = set()
     fov.add((py, px))
+    fov_range = 1
+    equipment = entities[entity_id].get("equipment")
+    if equipment:
+        light_source = equipment.get("light_source")
+        if light_source:
+            fov_range = entities[light_source]["range"]
 
     i: int
     for i in range(4):
@@ -110,12 +121,13 @@ def calc_fov(ori: Tuple[int, int], tile_map: dict[str, Any], entities: dict[int,
 
         rows: list[Row] = [first_row]
 
+
         while rows:
 
             row: Row = rows.pop()
 
-            #if row.depth > fov_range:
-            #    break
+            if row.depth >= fov_range:
+                break
 
             prev_tile: Optional[Tuple[int, int]] = None
 
@@ -193,9 +205,12 @@ class Fov(ecs.System):
             if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
                 start_time: float = time.time()
             fov_set: set[Tuple[int, int]]
-            fov_set = calc_fov(ori=self.ent_pos,
-                               tile_map=self.tile_map,
-                               entities=self.pool.entities)
+            fov_set = calc_fov(
+                entity_id=self.ent_id,
+                ori=self.ent_pos,
+                tile_map=self.tile_map,
+                entities=self.pool.entities
+            )
             self.pool.entities[self.ent_id]["FOV"] = fov_set
             self.pool.remove_component_from_entity("update_fov", self.ent_id)
             if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:

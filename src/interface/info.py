@@ -9,7 +9,7 @@ def render_info_window(window, game):
     max_hp = game.player["health"]["max_hp"]
     weapon = game.player["equipment"].get("weapon")
     armor = game.player["equipment"].get("armor")
-    torch = game.player["equipment"].get("torch")
+    light_source = game.player["equipment"].get("light_source")
     if weapon:
         weapon = game.pool.entities[weapon]["name"]
     else:
@@ -18,10 +18,10 @@ def render_info_window(window, game):
         armor = game.pool.entities[armor]["name"]
     else:
         armor = "none"
-    if torch:
-        torch = game.pool.entities[torch]["name"]
+    if light_source:
+        light_source = game.pool.entities[light_source]["name"]
     else:
-        torch = "none"
+        light_source = "none"
 
 
 
@@ -36,7 +36,7 @@ def render_info_window(window, game):
         "---[Equipment]---",
         f"Weapon: {weapon}",
         f"Armor: {armor}",
-        f"Torch: {torch}",
+        f"Light source: {light_source}",
         "---[Status]---",
         "not implemented"
     ]

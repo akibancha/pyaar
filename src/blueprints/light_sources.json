@@ -1,0 +1,10 @@
+{
+    "poor_night_vision": {
+	"name": "poor night vison",
+	"range": 4
+    },
+    "old_torch": {
+	"name": "old torch",
+	"range": 6
+    }
+}

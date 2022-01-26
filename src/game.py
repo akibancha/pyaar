@@ -230,7 +230,8 @@ class Game:
 
         if self.blueprints:
             forged_blueprint: dict = entity_factory.create_actor(
-                self.blueprints[chapter][blueprint]
+                self.blueprints[chapter][blueprint],
+                self
             )
 
             return self.pool.add_entity(forged_blueprint)

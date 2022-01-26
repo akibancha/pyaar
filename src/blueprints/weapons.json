@@ -6,5 +6,13 @@
 	"char": [["/", "blue", "black"]],
 	"attack_cost": 15,
 	"dmg_value": 10
+    },
+    "rat_teeth": {
+	"name": "rat teeth",
+	"item": false,
+	"weapon": true,
+	"char": false,
+	"attack_cost": 10,
+	"dmg_value": 4
     }
 }

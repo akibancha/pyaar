@@ -9,10 +9,16 @@
                 "char": "ø",
                 "name": "The body of "
         },
+	"equipment": {
+	    "weapon": ["weapons", "rat_teeth"],
+	    "armor": ["armors", "dirty_fur"],
+	    "light_source": ["light_sources", "poor_night_vision"]
+	},
         "movement_range": [16, 20],
         "hp_range": [8, 16],
         "blocks_path": true,
         "update_fov": true,
         "FOV":true,
-        "simple_ai": true}
+        "simple_ai": true
+    }
 }

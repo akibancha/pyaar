@@ -36,15 +36,22 @@ def main(screen) -> None:
     game_map.create_map(game=test, level=1)
 
     weapon_id = test.create_entity("weapons", "old_axe")
+    light_source_id = test.create_entity("light_sources", "old_torch")
 
     # init test player
     player_b = {"name": "Aki",
                 "player": True,
-                "inventory": {"slots": 4, "items": [weapon_id]},
+                "inventory": {
+                    "slots": 4,
+                    "items": [
+                        weapon_id,
+                        light_source_id
+                    ]
+                },
                 "equipment": {
                     "weapon": weapon_id,
                     "armor": None,
-                    "torch": None
+                    "light_source": light_source_id
                 },
                 "char": [["@", "white", "green"]],
                 "movement_cost": 10,

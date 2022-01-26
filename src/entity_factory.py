@@ -2,7 +2,7 @@ import random
 import copy
 
 
-def create_actor(input_blueprint: dict) -> dict:
+def create_actor(input_blueprint: dict, game) -> dict:
 
 
     blueprint = copy.deepcopy(input_blueprint)
@@ -13,8 +13,27 @@ def create_actor(input_blueprint: dict) -> dict:
 
     hp_range = blueprint.get("hp_range")
     movment_range = blueprint.get("movement_range")
+    equipment = blueprint.get("equipment")
 
     name_string = []
+
+    if equipment:
+        light_source = equipment["light_source"]
+        if light_source:
+            light_source_id = game.create_entity(
+                light_source[0],
+                light_source[1]
+            )
+            blueprint["equipment"]["light_source"] = light_source_id
+        armor = equipment["armor"]
+        if armor:
+            armor_id = game.create_entity(armor[0], armor[1])
+            blueprint["equipment"]["armor"] = armor_id
+        weapon = equipment["weapon"]
+        if weapon:
+            weapon_id = game.create_entity(weapon[0], weapon[1])
+            blueprint["equipment"]["weapon"] = weapon_id
+
 
     if names:
         name_string.append(f"{random.choice(names)}")
