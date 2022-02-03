@@ -4,9 +4,11 @@ from typing import Any, Optional, List
 
 class System:
 
-    def __init__(self,
-                 name: str,
-                 pool: Pool):
+    def __init__(
+        self,
+        name: str,
+        pool: Pool
+    ) -> None:
         self.name: str = name
         self.active: bool = True
         self.pool: Pool = pool
@@ -14,23 +16,27 @@ class System:
         self.components: dict = self.pool.components
 
     def update(self):
-        pass
+            pass
 
-    def act_on(self,
-               components: List[str]) -> set:
-        inside = list()
-        outside = list()
+    def act_on(self, components: List[str]) -> set:
+
+        inside = []
+        outside = []
+
         for component in components:
-            if self.components.get(component):
+            if self.components.get(component) or self.components.get(component[1:]):
                 if component[0] == "!":
                     outside.append(self.components[component[1:]])
                 else:
-                    inside.append(self.components[component])
+                    inside.extend(list(self.components[component]))
             else:
                 return set()
 
-        return set.intersection(*inside).difference(*outside)
+        if not inside:
+            for component in self.components.values():
+                inside.extend(list(component))
 
+        return set(inside).difference(*outside)
 
 def test_param_for_type(test: Any, should_be: Any, name: str):
     """
@@ -51,16 +57,15 @@ class Pool:
     Container Class for entities, components and systems
     """
 
-    def __init__(self,
-                 name: str) -> None:
-        self.name = name
-        self.entities = dict()
-        self.components = dict()
-        self.systems = dict()
-        self.system_layers = dict()
-        self.entity_id = 1
-        self.dead_entity_ids = set()
-        self.etc = dict()
+    def __init__(self,name: str) -> None:
+        self.name: str = name
+        self.entities: dict[int, dict[str, Any]] = dict()
+        self.components: dict[str, set[int]] = dict()
+        self.systems: dict[str, System] = dict()
+        self.system_layers: dict[int, list[str]] = dict()
+        self.entity_id: int = 1
+        self.dead_entity_ids: set[int] = set()
+        self.etc: dict[Any, Any] = dict()
 
     def check_for_entity_id(
         self,
@@ -76,6 +81,7 @@ class Pool:
         Removes all entities from the pool.
         :return: None
         """
+        key: str
         for key in self.components:
             self.components[key] = set()
         self.entities = dict()
