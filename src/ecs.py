@@ -26,11 +26,11 @@ class System:
         for component in components:
             if self.components.get(component) or self.components.get(component[1:]):
                 # negative values
-                # this components will not be acted on
+                # these components will not be acted on
                 if component[0] == "!":
                     _dont_act_on.append(self.components[component[1:]])
                 # positive values
-                # this components will be acted on
+                # these components will be acted on
                 else:
                     _act_on.append(self.components[component])
             # a value was not found
