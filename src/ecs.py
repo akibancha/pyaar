@@ -18,25 +18,32 @@ class System:
     def update(self):
             pass
 
-    def act_on(self, components: List[str]) -> set:
+    def act_on(self, components: List[str] = []) -> set:
 
-        inside = []
-        outside = []
+        _act_on = []
+        _dont_act_on = []
 
         for component in components:
             if self.components.get(component) or self.components.get(component[1:]):
+                # negative values
+                # this components will not be acted on
                 if component[0] == "!":
-                    outside.append(self.components[component[1:]])
+                    _dont_act_on.append(self.components[component[1:]])
+                # positive values
+                # this components will be acted on
                 else:
-                    inside.extend(list(self.components[component]))
+                    _act_on.append(self.components[component])
+            # a value was not found
+            # TODO raise error
             else:
                 return set()
 
-        if not inside:
-            for component in self.components.values():
-                inside.extend(list(component))
+        # no positiv values were found
+        # if no negative values were found all components will be acted on 
+        if not _act_on:
+            _act_on = [set.union(*self.components.values())]
 
-        return set(inside).difference(*outside)
+        return set.intersection(*_act_on).difference(*_dont_act_on)
 
 def test_param_for_type(test: Any, should_be: Any, name: str):
     """
