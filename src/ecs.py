@@ -22,15 +22,26 @@ class System:
 
         _act_on = []
         _dont_act_on = []
+        _act_on_ignore_intersection = []
+        _act_allways_on = []
 
         for component in components:
-            if self.components.get(component) or self.components.get(component[1:]):
-                # negative values
-                # these components will not be acted on
+            if (
+                self.components.get(component) or 
+                self.components.get(component[1:])
+            ):
                 if component[0] == "!":
-                    _dont_act_on.append(self.components[component[1:]])
-                # positive values
-                # these components will be acted on
+                    _dont_act_on.append(
+                        self.components[component[1:]]
+                    )
+                elif component[0] == "|":
+                    _act_on_ignore_intersection.append(
+                        self.components[component[1:]]
+                    )
+                elif component[0] == "+":
+                    _act_allways_on.append(
+                        self.components[component[1:]]
+                    )
                 else:
                     _act_on.append(self.components[component])
             # a value was not found
@@ -38,12 +49,26 @@ class System:
             else:
                 return set()
 
-        # no positiv values were found
-        # if no negative values were found all components will be acted on 
         if not _act_on:
-            _act_on = [set.union(*self.components.values())]
+            if _act_on_ignore_intersection:
+                _act_on = [set()]
+            else:
+                _act_on = [set.union(*self.components.values())]
 
-        return set.intersection(*_act_on).difference(*_dont_act_on)
+        if not _act_on_ignore_intersection:
+            return (
+                set.intersection(*_act_on).
+                difference(*_dont_act_on).
+                union(*_act_allways_on)
+            )
+        else:
+            return (
+                set.intersection(*_act_on).
+                union(*_act_on_ignore_intersection).
+                difference(*_dont_act_on).
+                union(*_act_allways_on)
+            )
+
 
 def test_param_for_type(test: Any, should_be: Any, name: str):
     """
