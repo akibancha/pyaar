@@ -10,6 +10,7 @@ import systems.perform
 import systems.simple_ai
 import systems.dmg
 import systems.die
+import systems.light_sources
 
 
 def main(screen) -> None:
@@ -35,47 +36,7 @@ def main(screen) -> None:
 
     game_map.create_map(game=test, level=1)
 
-    weapon_id = test.create_entity("weapons", "old_axe")
-    light_source_id = test.create_entity("light_sources", "old_torch")
-
-    # init test player
-    player_b = {"name": "Aki",
-                "player": True,
-                "inventory": {
-                    "slots": 4,
-                    "items": [
-                        weapon_id,
-                        light_source_id
-                    ]
-                },
-                "equipment": {
-                    "weapon": weapon_id,
-                    "armor": None,
-                    "light_source": light_source_id
-                },
-                "char": [["@", "white", "green"]],
-                "movement_cost": 10,
-                "health": {"max_hp": 15, "current_hp":15},
-                "dead_body": {"char": "ħ", "name": "The Body of"},
-                "update_fov": True,
-                "FOV": True}
-
     
-
-    test.init_player(player_b)
-
-    player_pos = (
-        test.pool.entities[random.choice(test.game_map["rooms"])]["center"]
-    )
-
-    test.place_entity(
-        pos=player_pos,
-        entity_id=test.player_id,
-        add_pos_comp=True
-    )
-
-    test.pointer_pos = player_pos
-
     # load config file
     test.load_config("config.json")
 
@@ -88,7 +49,7 @@ def main(screen) -> None:
     test.pool.add_system(
         system=systems.fov.Fov,
         name="fov",
-        layer=3
+        layer=4
     )
     test.pool.add_system(
         system=systems.perform.Perform,
@@ -110,7 +71,55 @@ def main(screen) -> None:
         name="die",
         layer=4
     )
+    test.pool.add_system(
+        system=systems.light_sources.LightZones,
+        name="light_zones",
+        layer=3
+    )
 
+    weapon_id = test.create_entity("weapons", "old_axe")
+    light_source_id = test.create_entity("light_sources", "old_torch")
+
+    # init test player
+    player_b = {
+        "name": "Aki",
+        "player": True,
+        "inventory": {
+            "slots": 4,
+            "items": []
+        },
+        "equipment": {
+            "weapon": None,
+            "armor": None,
+            "light_source": None
+        },
+        "char": [["@", "white", "green"]],
+        "movement_cost": 10,
+        "health": {"max_hp": 15, "current_hp":15},
+        "dead_body": {"char": "ħ", "name": "The Body of"},
+        "update_fov": True,
+        "FOV": True,
+        "actor": True
+    }
+
+
+    test.init_player(player_b)
+    test.give_item(test.player_id, weapon_id) 
+    test.give_item(test.player_id, light_source_id) 
+    test.equip_item(test.player_id, light_source_id)
+    test.equip_item(test.player_id, weapon_id)
+
+    player_pos = (
+        test.pool.entities[random.choice(test.game_map["rooms"])]["center"]
+    )
+
+    test.place_entity(
+        pos=player_pos,
+        entity_id=test.player_id,
+        add_pos_comp=True
+    )
+
+    test.pointer_pos = player_pos
 
     # welcome log msg
     test.log.append("Welcome!")
@@ -125,7 +134,8 @@ def main(screen) -> None:
 
     # init entity fovs
     test.debug_log.add(":: init entity fovs ::")
-    test.pool.update(["fov"])
+    test.pool.update(systems=["light_zones", "fov"])
+
 
     test.pointer_bound = True
     test.pointer_entity = test.player_id

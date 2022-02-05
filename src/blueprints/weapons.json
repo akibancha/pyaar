@@ -11,7 +11,7 @@
 	"name": "rat teeth",
 	"item": false,
 	"weapon": true,
-	"char": false,
+	"char": [["/", "blue", "black"]],
 	"attack_cost": 10,
 	"dmg_value": 4
     }

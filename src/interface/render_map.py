@@ -46,11 +46,9 @@ def get_draw_range(
     # vvv
     draw_x_begin = pointer_x - win_width // 2
     draw_x_end = pointer_x + win_width // 2
-    # correct for an odd numbered window size
     if win_width % 2 != 0:
         draw_x_end += 1
 
-    # correct draw ranges
     if draw_x_begin < 0:
         draw_x_begin = 0
         draw_x_end = win_width
@@ -76,31 +74,57 @@ def render(game,
     game_map_height = game_map["map_height"]
     game_map_width = game_map["map_width"]
     buffer = 3
-    draw_y, draw_x = get_draw_range(pointer_pos=pointer_pos,
-                                    map_size=(game_map_height, game_map_width),
-                                    window_size=(window_size_y, window_size_x),
-                                    buffer=buffer)
+    draw_y, draw_x = get_draw_range(
+            pointer_pos=pointer_pos,
+            map_size=(game_map_height, game_map_width),
+            window_size=(window_size_y, window_size_x),
+            buffer=buffer
+    )
 
     debug_string = f"({draw_y}, {draw_x}, {game.round}, {game.pointer_pos})"
     map_window.addstr(0, 1, debug_string)
     fov_set: Set[Tuple[int, int]] = set()
-    if fov:
+    if fov and isinstance(game.pool.entities[fov_entity]["FOV"], set):
         fov_set = game.pool.entities[fov_entity]["FOV"]
     for window_y, map_y in enumerate(draw_y, buffer):
         for window_x, map_x in enumerate(draw_x, buffer):
-            ent_id = game_tile_map[map_y][map_x][-1]
-            ent = game.pool.entities[ent_id]
-            char = ent.get("char")
-            char_list = random.choice(char)
-            char, fg, bg = char_list
-            color = game.colors[fg][bg]
-            if (fov
-               and (map_y, map_x) not in fov_set
-               and not game.config["debug"]["disable_fov"]):
+            ent_id = None
+            prio_list = {
+                "map_tile": [],
+                "map_object": [],
+                "item": [],
+                "actor": [],
+            }
+            for tile_id in game_tile_map[map_y][map_x]:
+                for prio_item, ent_list in prio_list.items():
+                    if game.pool.entities[tile_id].get(prio_item):
+                        ent_list.append(tile_id)
+            for prio_item, ent_list in prio_list.items():
+                if ent_list:
+                    ent_id = random.choice(ent_list)
+
+            if ent_id:
+                ent = game.pool.entities[ent_id]
+                char_list = random.choice(ent.get("char"))
+                char, fg, bg = char_list
+                color = game.colors[fg][bg]
+            else:
                 char = None
-            if char:
-                map_window.addstr(window_y, window_x,
-                                  char, curses.color_pair(color))
+                color = None
+            if (
+                fov and
+                (map_y, map_x) not in fov_set and not
+                game.config["debug"]["disable_fov"]
+            ):
+                char = None
+                color = None
+            if char and color:
+                map_window.addstr(
+                    window_y, 
+                    window_x,
+                    char, 
+                    curses.color_pair(color)
+                )
             if not game.pointer_bound:
                 py, px = pointer_pos
                 if map_y == py and map_x == px:

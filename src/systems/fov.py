@@ -96,6 +96,7 @@ def calc_fov(
         entity_id: int,
         ori: Tuple[int, int],
         tile_map: dict[str, Any],
+        light_map: list[list[bool]],
         entities: dict[int, dict[str, Any]]
 ) -> set[Tuple[int, int]]:
 
@@ -105,12 +106,12 @@ def calc_fov(
 
     fov: set[Tuple[int, int]] = set()
     fov.add((py, px))
-    fov_range = 1
-    equipment = entities[entity_id].get("equipment")
-    if equipment:
-        light_source = equipment.get("light_source")
-        if light_source:
-            fov_range = entities[light_source]["range"]
+#    fov_range = 1
+#    equipment = entities[entity_id].get("equipment")
+#    if equipment:
+#        light_source = equipment.get("light_source")
+#        if light_source:
+#            fov_range = entities[light_source]["range"]
 
     i: int
     for i in range(4):
@@ -126,8 +127,8 @@ def calc_fov(
 
             row: Row = rows.pop()
 
-            if row.depth >= fov_range:
-                break
+#            if row.depth >= fov_range:
+#                break
 
             prev_tile: Optional[Tuple[int, int]] = None
 
@@ -153,9 +154,12 @@ def calc_fov(
 
                 t_id = tile_map["map_array"][ty][tx][-1]
 
-                if (entities[t_id].get("blocks_sight") or
-                   is_symmetric(row, tile)):
-                    fov.add((ty, tx))
+                if (
+                    entities[t_id].get("blocks_sight") or
+                    is_symmetric(row, tile)
+                ):
+                   if light_map[ty][tx]:
+                        fov.add((ty, tx))
 
                 if prev_tile:
 
@@ -193,11 +197,13 @@ class Fov(ecs.System):
                      ent_id: int,
                      pos: Tuple[int, int],
                      tile_map: dict,
+                     light_map,
                      pool: ecs.Pool):
             threading.Thread.__init__(self)
             self.ent_id: int = ent_id
             self.ent_pos: Tuple[int, int] = pos
             self.tile_map: dict = tile_map
+            self.light_map = light_map
             self.pool: ecs.Pool = pool
 
         def run(self) -> None:
@@ -209,6 +215,7 @@ class Fov(ecs.System):
                 entity_id=self.ent_id,
                 ori=self.ent_pos,
                 tile_map=self.tile_map,
+                light_map=self.light_map,
                 entities=self.pool.entities
             )
             self.pool.entities[self.ent_id]["FOV"] = fov_set
@@ -247,10 +254,16 @@ class Fov(ecs.System):
             map_id: int
             py, px, map_id = ent["pos"]
             tile_map: dict[str, Any] = self.entities[map_id]
-            threads.append(Fov.FovThread(ent_id=ent_id,
-                                         pos=(py, px),
-                                         tile_map=tile_map,
-                                         pool=self.pool))
+            light_map = self.pool.etc["game"].game_map["light_map"]
+            threads.append(
+                Fov.FovThread(
+                    ent_id=ent_id,
+                    pos=(py, px),
+                    tile_map=tile_map,
+                    light_map=light_map,
+                    pool=self.pool
+                )
+            )
 
         if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
             if threads == []:

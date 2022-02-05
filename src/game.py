@@ -163,10 +163,16 @@ class Game:
             "map_array": [[[] for _ in range(width)]  # x list
                           for _ in range(height)],  # y list
             # map height:int and width: int
+            "light_map": [
+                [
+                    0 for x in range(width)
+                ]
+                for  y in range(height)
+            ],
             "map_height": height,
             "map_width": width,
             # a list of rooms that exist on the map
-            "rooms": list(),
+            "rooms": [],
             # entity is a game map
             # not used TODO remove
             "game_map": True
@@ -324,7 +330,19 @@ class Game:
             # add the position component in case it should be added
             if add_pos_comp:
                 self.pool.add_components_to_entity(pos_c, entity_id)
-
+                inventory = self.pool.entities[entity_id].get("inventory")
+                if inventory:
+                    for item in inventory["items"]:
+                        self.pool.add_components_to_entity(
+                            entity_id=item,
+                            components=pos_c
+                        )
+                        self.pool.add_components_to_entity(
+                            entity_id=item,
+                            components={"last_pos": (pos_y, pos_x, 1)}
+                        )
+                        self.game_map["map_array"][pos_y][pos_x].append(item)
+ 
         # check if a chapter and a blueprint were given
         elif chapter and blueprint:
             # check if the the blueprint book was initialized
@@ -340,6 +358,15 @@ class Game:
             # add the position component in case it should be added
             if add_pos_comp:
                 self.pool.add_components_to_entity(pos_c, entity_id)
+                # TODO put this in its own function at some point
+                inventory = self.pool.entities[entity_id].get("inventory")
+                if inventory:
+                    for item in inventory["items"]:
+                        self.pool.add_components_to_entity(
+                            entity_id=item,
+                            components=pos_c
+                        )
+                        self.game_map["map_array"][pos_y][pos_x].append(item)
             # return the id of the created entity
             return entity_id
 
@@ -429,6 +456,56 @@ class Game:
                     if entity_id in self.game_map["map_array"][pos_y][pos_x]:
                         # erase the entity from the coordinate
                         self.game_map["map_array"][pos_y][pos_x].remove(entity_id)
+
+    def give_item(
+        self,
+        entity_id,
+        item_id
+    ):
+        if (
+            self.pool.entities.get(entity_id) and
+            self.pool.entities.get(item_id)
+        ):
+            inventory = self.pool.entities[entity_id].get("inventory")
+            if inventory:
+                inventory["items"].append(item_id)
+                pos = self.pool.entities[entity_id].get("pos")
+                if pos:
+                    self.pool.add_components_to_entity(
+                        entity_id=entity_id,
+                        components={"pos": pos}
+                    )
+
+    def equip_item(
+        self,
+        entity_id,
+        item_id
+    ):
+        if (
+            self.pool.entities.get(entity_id) and
+            self.pool.entities.get(item_id)
+        ):
+            inventory = self.pool.entities[entity_id].get("inventory")
+            equipment = self.pool.entities[entity_id].get("equipment")
+            if inventory and equipment:
+                if self.pool.entities[item_id].get("light_source"):
+                    equipment["light_source"] = item_id
+                    self.pool.add_components_to_entity(
+                        entity_id=item_id,
+                        components={"update_light_zone": True}
+                    )
+                    self.pool.add_components_to_entity(
+                        entity_id=entity_id,
+                        components={"update_fov": True}
+                    )
+                    self.pool.update(systems=["light_zones", "fov"])
+                if self.pool.entities[item_id].get("weapon"):
+                    equipment["weapon"] = item_id
+                if self.pool.entities[item_id].get("armor"):
+                    equipment["armor"] = item_id
+
+ 
+
 
     def perform_input(
         self,

@@ -53,7 +53,13 @@ class MoveSystem(ecs.System):
 
             for ent_in in self.entities[map_id]["map_array"][dy][dx]:
                 
-                if self.entities[ent_in].get("enemy") and ent_in != e_id or self.entities[ent_in].get("player"):
+                if (
+                    (
+                        self.entities[ent_in].get("enemy") or 
+                        self.entities[ent_in].get("player")
+                    ) and
+                    ent_in != e_id
+                ):
                     # function for dmg
                     self.pool.etc["game"].log.append(f"{name} attacks {self.entities[ent_in]['name']}")
                     dmg_component = self.create_dmg_component(e_id, ent_in)
@@ -61,9 +67,11 @@ class MoveSystem(ecs.System):
                         self.pool.add_components_to_entity(dmg_component, ent_in)
                     break
 
-                if (self.entities[ent_in].get("blocks_path")
-                    and not self.pool.etc["game"].config["debug"]["disable_collision"]
-                    and not ent_in == e_id):
+                if (
+                        self.entities[ent_in].get("blocks_path") and not
+                        self.pool.etc["game"].config["debug"]["disable_collision"] and not
+                        ent_in == e_id
+                    ):
                     
                     tile = self.entities[ent_in]
                     tile_name = tile.get("name")
@@ -84,10 +92,28 @@ class MoveSystem(ecs.System):
                         self.pool.etc["game"].log.append(log)
                     break
             else:
-
                 self.entities[e_id]["pos"] = (dy, dx, map_id)
                 self.pool.entities[map_id]["map_array"][dy][dx].append(e_id)
                 self.pool.entities[map_id]["map_array"][y][x].remove(e_id)
+                inventory = ent.get("inventory")
+                if inventory:
+                    for item in inventory["items"]:
+                        if self.pool.entities[item].get("pos"):
+                            self.pool.entities[item]["pos"] = (dy, dx, map_id)
+                        else:
+                            self.pool.add_components_to_entity(
+                                entity_id=item,
+                                components={"pos": (dy, dx, map_id)}
+                            )
+                        self.pool.entities[map_id]["map_array"][dy][dx].append(item)
+                        if item in self.pool.entities[map_id]["map_array"][y][x]:
+                            self.pool.entities[map_id]["map_array"][y][x].remove(item)
+                        if self.pool.entities[item].get("light_source"):
+                            self.pool.add_components_to_entity(
+                                entity_id=item,
+                                components={"update_light_zone": True}
+                            )
+
                 if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
                     mgs0 = f" | | <entity {e_id}> on pos: {(y, x)} was moved to target."
                     self.pool.etc["game"].debug_log.add(mgs0)

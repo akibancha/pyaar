@@ -2,10 +2,10 @@
   "test_wall": {
     "name": "test wall",
     "char": [["#", "yellow", "black"]],
-    "map_tile": true,
     "blocks_path": true,
     "wall": true,
-    "blocks_sight": true
+    "blocks_sight": true,
+    "map_tile": true
   },
   "test_floor": {
     "name": "test floor",
@@ -17,19 +17,20 @@
     "char": [["Y", "red", "black"]],
     "blocks_path": true,
     "blocks_sight": true,
-    "map_tile": true
+    "map_object": true
   },
   "test_copper_tree": {
     "name": "copper tree",
     "char": [["T", "cyan", "black"]],
     "blocks_path": true,
     "blocks_sight": true,
-    "map_tile": true
+    "map_object": true
   },
   "boulder": {
     "name": "boulder",
     "char": [["O", "white", "black"]],
     "blocks_path": true,
-    "blocks_sight": true
+    "blocks_sight": true,
+    "map_object": true
   }
 }

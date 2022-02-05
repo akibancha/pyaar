@@ -2,6 +2,7 @@
     "bored_rat": {
         "entity_type": "rat",
         "enemy": true,
+        "actor": true,
         "names": ["Kra", "Xaxa", "Siief", "Quee", "Scaaf", "Frai", "Quaae"],
         "attributes": ["bloody", "cruel", "slow", "crazy", "stoned", "bored", "dirty", "wet", "lazy"],
         "char": [["r", "red", "black"]],

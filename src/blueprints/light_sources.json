@@ -5,6 +5,11 @@
     },
     "old_torch": {
 	"name": "old torch",
-	"range": 6
+    "item": true,
+    "lights": [],
+    "light_source": true,
+    "update_light_zone": true,
+    "char":[["/", "black", "white"]],
+	"light_range": 6
     }
 }

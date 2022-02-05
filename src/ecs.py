@@ -18,6 +18,8 @@ class System:
     def update(self):
             pass
 
+    def report(self):
+        pass
     def act_on(self, components: List[str] = []) -> set:
 
         _act_on = []
@@ -246,12 +248,11 @@ class Pool:
         if systems and not layers:
             for system in systems:
                 self.systems[system].update()
-                return
+            return
         if layers and not systems:
             for layer in sorted(layers):
                 for system in self.system_layers[layer]:
                     self.systems[system].update()
-
         if not systems and not layers:
             for layer in sorted(self.system_layers.keys()):
                 for system in self.system_layers[layer]:
