@@ -4,12 +4,7 @@ import random
 import game_map
 from game import Game
 
-import systems.move
-import systems.fov
-import systems.perform
-import systems.simple_ai
-import systems.dmg
-import systems.die
+import systems
 
 
 def main(screen) -> None:
@@ -41,32 +36,32 @@ def main(screen) -> None:
 
     # init systems
     test.pool.add_system(
-        system=systems.move.MoveSystem,
+        system=systems.MoveSystem,
         name="move",
         layer=2
     )
     test.pool.add_system(
-        system=systems.fov.Fov,
+        system=systems.FovSystem,
         name="fov",
         layer=4
     )
     test.pool.add_system(
-        system=systems.perform.Perform,
+        system=systems.PerformSystem,
         name="perform",
         layer=0
     )
     test.pool.add_system(
-        system=systems.simple_ai.Simple_Ai_System,
+        system=systems.SimpleAiSystem,
         name="simple_ai",
         layer=0
     )
     test.pool.add_system(
-        system=systems.dmg.DmgSystem,
+        system=systems.DmgSystem,
         name="dmg",
         layer=3
     )
     test.pool.add_system(
-        system=systems.die.DieSystem,
+        system=systems.DieSystem,
         name="die",
         layer=4
     )
@@ -158,10 +153,8 @@ def main(screen) -> None:
             test.round += 1
 
 
-# start main function
 if __name__ == "__main__":
     curses.wrapper(main)
 
-# say good bye
 print("Thank you for playing pyaar!")
 print("Good Bye!")

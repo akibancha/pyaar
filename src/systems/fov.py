@@ -184,7 +184,7 @@ def calc_fov(
     return fov
 
 
-class Fov(ecs.System):
+class FovSystem(ecs.System):
 
 
     lock = threading.Lock()
@@ -203,7 +203,7 @@ class Fov(ecs.System):
             self.pool: ecs.Pool = pool
 
         def run(self) -> None:
-            Fov.lock.acquire()
+            FovSystem.lock.acquire()
             if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
                 start_time: float = time.time()
             fov_set: set[Tuple[int, int]]
@@ -225,11 +225,11 @@ class Fov(ecs.System):
                 self.pool.etc["game"].debug_log.add(mgs1)
                 self.pool.etc["game"].debug_log.add(mgs0)
                 self.pool.etc["game"].debug_log.add(mgs2)
-            Fov.lock.release()
+            FovSystem.lock.release()
 
     def update(self):
 
-        threads: list[Fov.FovThread] = []
+        threads: list[FovSystem.FovThread] = []
 
         
         if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
@@ -250,7 +250,7 @@ class Fov(ecs.System):
             py, px, map_id = ent["pos"]
             tile_map: dict[str, Any] = self.entities[map_id]
             threads.append(
-                Fov.FovThread(
+                FovSystem.FovThread(
                     ent_id=ent_id,
                     pos=(py, px),
                     tile_map=tile_map,

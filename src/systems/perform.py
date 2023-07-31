@@ -1,7 +1,7 @@
 import ecs
 
 
-class Perform(ecs.System):
+class PerformSystem(ecs.System):
 
     def update(self):
 

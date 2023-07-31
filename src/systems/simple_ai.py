@@ -70,7 +70,7 @@ def a_star(game,
                     open_list.append(neighbour)
 
 
-class Simple_Ai_System(ecs.System):
+class SimpleAiSystem(ecs.System):
 
     testlock = threading.Lock()
 
@@ -85,7 +85,7 @@ class Simple_Ai_System(ecs.System):
 
         def run(self):
 
-            Simple_Ai_System.testlock.acquire()
+            SimpleAiSystem.testlock.acquire()
             start_time = time.time()
             if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
                 mgs0 = f" | | | <entity {self.ent_id}> will try to find a path towards the player."
@@ -123,7 +123,7 @@ class Simple_Ai_System(ecs.System):
                     self.pool.etc["game"].debug_log.add(mgs0)
                     self.pool.etc["game"].debug_log.add(" | |")
             self.pool.add_components_to_entity(perform, self.ent_id)
-            Simple_Ai_System.testlock.release()
+            SimpleAiSystem.testlock.release()
 
     def update(self):
 
@@ -164,7 +164,7 @@ class Simple_Ai_System(ecs.System):
                 if self.pool.etc["game"].config["debug"]["debug_log_mgs_system_report"] is True:
                     mgs0 = f" | | <entity {entity_id}> can see the player. It will try to move towards the player or attack them."
                     self.pool.etc["game"].debug_log.add(mgs0)
-                threads.append(Simple_Ai_System.PFThread(ent_id=entity_id,
+                threads.append(SimpleAiSystem.PFThread(ent_id=entity_id,
                                                          spos=(ey, ex),
                                                          tpos=player_pos,
                                                          pool=self.pool))
