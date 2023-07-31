@@ -162,13 +162,6 @@ class Game:
             # List[List[int]]
             "map_array": [[[] for _ in range(width)]  # x list
                           for _ in range(height)],  # y list
-            # map height:int and width: int
-            "light_map": [
-                [
-                    0 for x in range(width)
-                ]
-                for  y in range(height)
-            ],
             "map_height": height,
             "map_width": width,
             # a list of rooms that exist on the map
@@ -498,7 +491,7 @@ class Game:
                         entity_id=entity_id,
                         components={"update_fov": True}
                     )
-                    self.pool.update(systems=["light_zones", "fov"])
+                    self.pool.update(systems=["fov"])
                 if self.pool.entities[item_id].get("weapon"):
                     equipment["weapon"] = item_id
                 if self.pool.entities[item_id].get("armor"):

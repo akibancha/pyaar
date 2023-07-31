@@ -10,7 +10,6 @@ import systems.perform
 import systems.simple_ai
 import systems.dmg
 import systems.die
-import systems.light_sources
 
 
 def main(screen) -> None:
@@ -71,11 +70,6 @@ def main(screen) -> None:
         name="die",
         layer=4
     )
-    test.pool.add_system(
-        system=systems.light_sources.LightZones,
-        name="light_zones",
-        layer=3
-    )
 
     weapon_id = test.create_entity("weapons", "old_axe")
     light_source_id = test.create_entity("light_sources", "old_torch")
@@ -134,7 +128,7 @@ def main(screen) -> None:
 
     # init entity fovs
     test.debug_log.add(":: init entity fovs ::")
-    test.pool.update(systems=["light_zones", "fov"])
+    test.pool.update(systems=["fov"])
 
 
     test.pointer_bound = True

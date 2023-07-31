@@ -62,7 +62,7 @@ def get_draw_range(
 def render(game,
            map_window,
            fov: bool,
-           fov_entity: int = None,
+           fov_entity: int|None = None,
            pointer_pos: Tuple[int, int] = (0, 0)) -> None:
 
     map_window.box()
