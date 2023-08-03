@@ -56,7 +56,7 @@ def item_screen_loop(game, window, item_id) -> None:
                     game.player["equipment"]["weapon"] = None
 
 
-def iventory_loop(game, window) -> None:
+def inventory_loop(game, window) -> None:
     if not game.player_id or not game.pool.entities[game.player_id].get("inventory"):
         game.state = "normal"
         return
