@@ -1,6 +1,7 @@
 {
     "old_axe": {
 	"name": "old axe",
+    "desc": "An old rusty axe.",
 	"item": true,
 	"weapon": true,
 	"char": [["/", "blue", "black"]],

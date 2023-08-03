@@ -87,3 +87,6 @@ def handle_input(game,
             if "debug_show_log" in k and key in v:
                 if not game.pointer_bound:
                     interface.debug.render_log(game=game, window=game.base_windows["std"])
+
+            if "inventory" in k and key in v:
+                game.state = "inventory"

@@ -40,6 +40,9 @@ def render_info_window(window, game):
         "---[Status]---",
         "not implemented"
     ]
+
+    window.erase()
+    window.box()
     window.addstr(
         0,
         2,

@@ -14,6 +14,7 @@ import entity_factory
 import helpers.tilemap
 import interface.game_over
 import interface.info
+from interface.inventory import iventory_loop
 
 
 class Game:
@@ -597,6 +598,10 @@ class Game:
                 window=self.base_windows["map"],
                 game=self
             )
+
+        elif self.state == "inventory":
+            iventory_loop(self, self.base_windows["map"])
+
 
     def init_blueprints(self) -> None:
 
